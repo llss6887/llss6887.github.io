@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,SpringBoot,Docker Compose,nginx,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Docker Compose概述Compose是一个用于定义和运行多容器Docker应用程序的工具。使用Compose，通过YAML文件来配置应用程序的服务。然后，使用单个命令，可以从配置中创建并启动所有服务。通俗一点就是你通过配置YAML文件，你可以同时构建和启动多个Docker容器，而且不必一个个的启动，通过编排，将所有依赖的Docker一个命令全启动。Compose适用于所有环境：生产，登">
+<meta name="keywords" content="java,SpringBoot,Docker Compose,nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker Compose部署nginx+springBoot">
+<meta property="og:url" content="https://llss6887.github.io/2018/09/22/docker-compose/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="Docker Compose概述Compose是一个用于定义和运行多容器Docker应用程序的工具。使用Compose，通过YAML文件来配置应用程序的服务。然后，使用单个命令，可以从配置中创建并启动所有服务。通俗一点就是你通过配置YAML文件，你可以同时构建和启动多个Docker容器，而且不必一个个的启动，通过编排，将所有依赖的Docker一个命令全启动。Compose适用于所有环境：生产，登">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/2cc27fb6da554a7e81c6979ebe7e81ae.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/e38ab15b591a4f9c9dbabecdb8793052.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/c5b13dd8f05c4cceae93e980a24eb8cc.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/d37fc6dcd08549408c7b4fc68f7ee240.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/c56b40409b844923959b540069c96e23.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/1eb4d903910e4fccb8629f29987c2778.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/434c760dbe5846b8bbac38721a29213f.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/e24f0716370444c8afbc30f43924655a.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/8a261bf3e7b34dd989b3d06ce0bc54da.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-compose/0ed272b56fad4a0c9bda9656f7f1bff1.gif">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.256Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker Compose部署nginx+springBoot">
+<meta name="twitter:description" content="Docker Compose概述Compose是一个用于定义和运行多容器Docker应用程序的工具。使用Compose，通过YAML文件来配置应用程序的服务。然后，使用单个命令，可以从配置中创建并启动所有服务。通俗一点就是你通过配置YAML文件，你可以同时构建和启动多个Docker容器，而且不必一个个的启动，通过编排，将所有依赖的Docker一个命令全启动。Compose适用于所有环境：生产，登">
+<meta name="twitter:image" content="https://llss6887.github.io/2018/09/22/docker-compose/2cc27fb6da554a7e81c6979ebe7e81ae.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2018/09/22/docker-compose/">
+
+
+
+
+
+  <title>Docker Compose部署nginx+springBoot | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2018/09/22/docker-compose/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Docker Compose部署nginx+springBoot</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-22T23:59:47+08:00">
+                2018-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/09/22/docker-compose/2cc27fb6da554a7e81c6979ebe7e81ae.jpg" alt=""></p>
+<h2 id="Docker-Compose概述"><a href="#Docker-Compose概述" class="headerlink" title="Docker Compose概述"></a><strong>Docker Compose概述</strong></h2><p>Compose是一个用于定义和运行多容器Docker应用程序的工具。使用Compose，通过YAML文件来配置应用程序的服务。然后，使用单个命令，可以从配置中创建并启动所有服务。通俗一点就是你通过配置YAML文件，你可以同时构建和启动多个Docker容器，而且不必一个个的启动，通过编排，将所有依赖的Docker一个命令全启动。<br>Compose适用于所有环境：生产，登台，开发，测试以及CI工作流程。<br><a id="more"></a></p>
+<h3 id="使用Compose基本上是一个三步过程："><a href="#使用Compose基本上是一个三步过程：" class="headerlink" title="使用Compose基本上是一个三步过程："></a><strong>使用Compose基本上是一个三步过程：</strong></h3><p>定义您的应用程序环境，Dockerfile以便可以在任何地方进行复制。<br>定义构成应用程序的服务，docker-compose.yml 以便它们可以在隔离环境中一起运行。<br>Run docker-compose up和Compose启动并运行整个应用程序。<br><code>docker-compose.yml</code> 文件是这样的</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span>      <span class="comment">#容器的名称</span></span><br><span class="line"><span class="attr">    build:</span> <span class="string">.</span> <span class="comment">#构建web这个容器的Dockerfile的目录</span></span><br><span class="line"><span class="attr">    ports:</span>   <span class="comment">#端口的映射</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"5000:5000"</span>  </span><br><span class="line"><span class="attr">    volumes:</span>   <span class="comment">#文件挂载</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">.:/code</span></span><br><span class="line"><span class="attr">    - logvolume01:</span><span class="string">/var/log</span></span><br><span class="line"><span class="attr">    links:</span>   <span class="comment">#依赖的容器</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">redis</span></span><br><span class="line"><span class="attr">  redis:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">redis</span>  <span class="comment">#使用的镜像</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line"><span class="attr">  logvolume01:</span> <span class="string">&#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a><strong>常用命令</strong></h2><p>docker-compose up -d nginx  构建建启动nignx容器 后台启动<br>docker-compose exec nginx bash  进入到nginx容器中<br>docker-compose down   删除所有nginx容器,镜像<br>docker-compose ps   显示所有正在运行的容器<br>docker-compose restart nginx   重新启动nginx容器<br>docker-compose build nginx    构建镜像<br>docker-compose build –no-cache nginx   不带缓存的构建。<br>docker-compose logs  nginx    查看nginx的日志<br>docker-compose logs -f nginx   查看nginx的实时日志<br>docker-compose config  -q   验证（docker-compose.yml）文件配置，当配置正确时，不输出任何内容，当文件配置错误，输出错误信息。<br>docker-compose events –json nginx       以json的形式输出nginx的docker日志<br>docker-compose pause nginx    暂停nignx容器<br>docker-compose unpause nginx     恢复ningx容器<br>docker-compose rm nginx           删除容器（删除前必须关闭容器）<br>docker-compose stop        停止所有容器<br>docker-compose stop nginx       停止nignx容器<br>docker-compose start nginx       启动nignx容器</p>
+<p>更多命令  <a href="https://docs.docker.com/compose/compose-file/#context" title="**参考这里**" target="_blank" rel="noopener"><strong>参考这里</strong></a></p>
+<h2 id="第一个Docker-Compose的例子："><a href="#第一个Docker-Compose的例子：" class="headerlink" title="第一个Docker Compose的例子："></a><strong>第一个Docker Compose的例子：</strong></h2><p>这个例子，用Docker Compose 来编排启动两个springBoot的app。<br>app.jar还是用上次Docker那篇文章的app， 文章地址  <strong><a href="https://llss6887.github.io/2018/09/22/docker-springboot/" title="##点击这里##">##点击这里##</a></strong></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a><strong>安装</strong></h3><p><strong>1.从github上下载docker-compose二进制文件安装</strong><br>下载最新版的docker-compose文件 </p>
+<p>$ sudo curl -L<br><a href="https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname" target="_blank" rel="noopener">https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname</a> -s<code>-</code>uname -m` -o/usr/local/bin/docker-compose</p>
+<p>添加可执行权限<br>$ sudo chmod +x /usr/local/bin/docker-compose</p>
+<p>测试安装结果<br>$ docker-compose –version<br>docker-compose version 1.16.1, build 1719ceb</p>
+<p><strong>2.pip安装</strong></p>
+<p>$ sudo pip install docker-compose<br><img src="/2018/09/22/docker-compose/e38ab15b591a4f9c9dbabecdb8793052.png" alt=""><br>安装完毕！</p>
+<p>在/home/docker-compose/文件夹下创建 docker-compose.yml文件</p>
+<p>先生成app的容器，Dockerfile内容如下：<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="attr">java:8</span></span><br><span class="line"><span class="string">MAINTAINER</span> <span class="string">"liss"</span><span class="string">&lt;168337573@qq.com&gt;</span></span><br><span class="line"><span class="string">WORKDIR</span>  <span class="string">/tmp</span></span><br><span class="line"><span class="string">RUN</span> <span class="string">mkdir</span> <span class="string">/home/apps/</span></span><br><span class="line"><span class="string">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="string">CMD</span> <span class="string">java</span> <span class="bullet">-jar</span> <span class="string">/home/apps/app.jar</span>  <span class="comment">#启动jar的命令</span></span><br></pre></td></tr></table></figure></p>
+<p>执行 build -t app:v1 . 生成一个app:v1的容器<br><img src="/2018/09/22/docker-compose/c5b13dd8f05c4cceae93e980a24eb8cc.png" alt=""></p>
+<p>开始编写docker-compose.yml文件，内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2'</span>  <span class="comment">#版本名称  必须写</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  app-1:</span>  <span class="comment">#定义名称</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">"app-1"</span>  <span class="comment">#容器名称</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span>  <span class="comment">#重启策略</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"app:v1"</span>  <span class="comment">#用的哪个镜像</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/tmp</span>  <span class="comment">#工作目录</span></span><br><span class="line"><span class="attr">    volumes:</span>   <span class="comment">#文件挂载</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/apps/:/home/apps/</span></span><br><span class="line"><span class="attr">    ports:</span>  <span class="comment">#映射端口</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"9001:8080"</span></span><br><span class="line"><span class="attr">  app-2:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">"app-2"</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"app:v1"</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/tmp</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">/home/apps/:/home/apps/</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"9002:8080"</span></span><br></pre></td></tr></table></figure>
+<p>执行 <code>docker-compose up</code>启动编排，此模式为前端启动。</p>
+<p>后台启动命令为 <code>docker-compose up -d</code></p>
+<p><img src="/2018/09/22/docker-compose/d37fc6dcd08549408c7b4fc68f7ee240.png" alt="![](2caa80527dcb4f05962a9345562cb3f8.png)"><br>启动完毕！ 查看docker正在运行的容器： docker ps 或者docker-compose ps</p>
+<p><img src="/2018/09/22/docker-compose/c56b40409b844923959b540069c96e23.png" alt=""><br>一切正常！ 我们来访问下这个服务器的9001端口和9002端口<br><img src="/2018/09/22/docker-compose/1eb4d903910e4fccb8629f29987c2778.png" alt=""><br><img src="/2018/09/22/docker-compose/434c760dbe5846b8bbac38721a29213f.png" alt=""><br>我们看到两个都没有问题，本次编排成功。</p>
+<h4 id="下面我们看用nginx如何做负载均衡"><a href="#下面我们看用nginx如何做负载均衡" class="headerlink" title="下面我们看用nginx如何做负载均衡"></a><strong>下面我们看用nginx如何做负载均衡</strong></h4><p>首先安装nginx的容器 并配置nginx.conf的负载均衡，为了能直观看到效果，我们将app1的html内容改为 <code>this is my app1</code>, app2改为 <code>this is app2</code> app的容器还用之前的app:v1这个容器</p>
+<p>下载nginx安装包，地址为：<a href="http://nginx.org/en/download.html" title="http://nginx.org/en/download.html" target="_blank" rel="noopener">http://nginx.org/en/download.html</a></p>
+<p>创建nginx的Dockerfile文件：<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="attr">centos:6</span></span><br><span class="line"><span class="string">MAINTAINER</span> <span class="string">"liss"</span><span class="string">&lt;168337573@qq.com&gt;</span></span><br><span class="line"><span class="string">RUN</span> <span class="string">yum</span> <span class="string">install</span> <span class="bullet">-y</span> <span class="string">gcc</span> <span class="string">gcc-c++</span> <span class="string">make</span> <span class="string">openssl-devel</span> <span class="string">pcre-devel</span>  <span class="comment">#安装nginx必须的库</span></span><br><span class="line"><span class="string">ADD</span> <span class="string">nginx-1.12.2.tar.gz</span> <span class="string">/tmp</span> <span class="comment">#将下载的nginx放到Dockerfile一个目录 并添加到容器中</span></span><br><span class="line"><span class="string">RUN</span> <span class="string">cd</span> <span class="string">/tmp/nginx-1.12.2</span> <span class="string">&amp;&amp;</span> <span class="string">./configure</span> <span class="bullet">--prefix=/usr/local/nginx</span> <span class="string">&amp;&amp;</span> <span class="string">make</span> <span class="bullet">-j</span> <span class="number">2</span> <span class="string">&amp;&amp;</span> <span class="string">make</span> <span class="string">install</span> <span class="comment">#执行nginx的安装</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">RUN</span> <span class="string">rm</span> <span class="bullet">-f</span> <span class="string">/usr/local/nginx/conf/nginx.conf</span> <span class="comment">#删除安装的nginx配置文件</span></span><br><span class="line"><span class="string">EXPOSE</span> <span class="number">80</span> <span class="comment">#对外端口</span></span><br><span class="line"><span class="string">CMD</span> <span class="string">["/usr/local/nginx/sbin/nginx",</span> <span class="string">"-g"</span><span class="string">,</span> <span class="string">"daemon off;"</span><span class="string">]</span> <span class="comment">#启动命令</span></span><br></pre></td></tr></table></figure></p>
+<p>执行 <code>docker build -t nginx:app .</code> 创建nginx容器。<br>修改一个nginx.conf<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line">upstream app &#123;</span><br><span class="line">      server app-1:8080;  #compose中的名称和端口</span><br><span class="line">      server app-2:8080;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  localhost;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  /home/logs/nginx/access/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://app; #负载均衡配置</span><br><span class="line">            proxy_set_header Host $host:$server_port;</span><br><span class="line">            proxy_set_header X-Forwarded-Host $server_name;</span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">            proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">            proxy_set_header HTTP_X_FORWARDED_FOR $remote_addr;</span><br><span class="line">           #proxy_set_header Forwarded $proxy_add_forwarded;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>docker-compose.yml文件如下：<br><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  nginx:</span></span><br><span class="line"><span class="attr">     container_name:</span> <span class="string">"nginx-app"</span></span><br><span class="line"><span class="attr">     image:</span> <span class="string">"nginx:app"</span></span><br><span class="line"><span class="attr">     restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">     ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8008:80"</span>  <span class="comment">#我的服务80端口被占着 就映射到了8008端口</span></span><br><span class="line"><span class="attr">     volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./nginx/nginx.conf:/usr/local/nginx/conf/nginx.conf</span></span><br><span class="line"><span class="attr">  app-1:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">"app-1"</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"app:v1"</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/tmp</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">./app1/:/home/apps/</span></span><br><span class="line"><span class="attr">    expose:</span>  <span class="comment">#容器暴露的端口</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8080"</span></span><br><span class="line"><span class="attr">    depends_on:</span>  <span class="comment">#添加的依赖</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">"nginx"</span></span><br><span class="line"><span class="attr">  app-2:</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">"app-2"</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">always</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">"app:v1"</span></span><br><span class="line"><span class="attr">    working_dir:</span> <span class="string">/tmp</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">./app2/:/home/apps/</span></span><br><span class="line"><span class="attr">    expose:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8080"</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">     -</span> <span class="string">"nginx"</span></span><br></pre></td></tr></table></figure></p>
+<p>现在，我们来启动我们的编排任务：</p>
+<p><code>docker-compose up -d</code>  后台启动<br><code>docker-compose logs -f</code> 实时查看启动的容器日志</p>
+<p><img src="/2018/09/22/docker-compose/e24f0716370444c8afbc30f43924655a.png" alt=""><br><img src="/2018/09/22/docker-compose/8a261bf3e7b34dd989b3d06ce0bc54da.png" alt=""></p>
+<p>启动完毕，我们来访问下8008是否成功<br><img src="/2018/09/22/docker-compose/0ed272b56fad4a0c9bda9656f7f1bff1.gif" alt=""></p>
+<p>到这里就成功了！ </p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a><strong>结语</strong></h2><p>这里只是一个简单的例子。实际生产中可能需要与tomcat、mysql、redis等等这些一起编排，写法都是一个写法，只不过根据自己的需求，编写自己的YAML就可以了。  学无止境   每一天都是崭新的最后一天。</p>
+<p>源码地址： <a href="https://github.com/llss6887/docker.git" title="**戳这里**" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+<p>博客地址：<a href="https://llss6887.github.io" title=" https://llss6887.github.io"> <strong>https://llss6887.github.io</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/Docker-Compose/" rel="tag"><i class="fa fa-tag"></i> Docker Compose</a>
+          
+            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/22/docker-springboot/" rel="next" title="利用Docker部署springBoot应用">
+                <i class="fa fa-chevron-left"></i> 利用Docker部署springBoot应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-Compose概述"><span class="nav-text">Docker Compose概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Compose基本上是一个三步过程："><span class="nav-text">使用Compose基本上是一个三步过程：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个Docker-Compose的例子："><span class="nav-text">第一个Docker Compose的例子：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#下面我们看用nginx如何做负载均衡"><span class="nav-text">下面我们看用nginx如何做负载均衡</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

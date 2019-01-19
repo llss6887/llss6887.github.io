@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringCloud,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Spring Cloud-zuul服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和">
+<meta name="keywords" content="SpringCloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud-zuul">
+<meta property="og:url" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="Spring Cloud-zuul服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/1.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/2.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/3.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/4.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/5.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/6.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/7.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/8.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/9.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/10.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/11.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/13.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Cloud-zuul">
+<meta name="twitter:description" content="Spring Cloud-zuul服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/">
+
+
+
+
+
+  <title>Spring Cloud-zuul | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/08/10/SpringCloud-zuul/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Spring Cloud-zuul</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T23:59:47+08:00">
+                2017-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringCloud/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringCloud</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Spring-Cloud-zuul"><a href="#Spring-Cloud-zuul" class="headerlink" title="Spring Cloud-zuul"></a>Spring Cloud-zuul</h2><p>服务网关是微服务架构中一个不可或缺的部分。通过服务网关统一向外系统提供REST API的过程中，除了具备服务路由、均衡负载功能之外，它还具备了权限控制等功能。Spring Cloud Netflix中的Zuul就担任了这样的一个角色，为微服务架构提供了前门保护的作用，同时将权限控制这些较重的非业务逻辑内容迁移到服务路由层面，使得服务集群主体能够具备更高的可复用性和可测试性。</p>
+<p>在Spring Cloud体系中， Spring Cloud Zuul就是提供负载均衡、反向代理、权限认证的一个API gateway。是微服务架构的不可或缺的一部分，提供动态路由，监控，弹性，安全等的边缘服务。Zuul是Netflix出品的一个基于JVM路由和服务端的负载均衡器。<br><a id="more"></a></p>
+<h3 id="简单实用"><a href="#简单实用" class="headerlink" title="简单实用"></a>简单实用</h3><h4 id="POM依赖"><a href="#POM依赖" class="headerlink" title="POM依赖"></a>POM依赖</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-zuul<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="启动类"><a href="#启动类" class="headerlink" title="启动类"></a>启动类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZuulSimpleApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ZuulSimpleApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加入<code>@EnableZuulProxy</code>注解开启网关路由</p>
+<h4 id="YML配置"><a href="#YML配置" class="headerlink" title="YML配置"></a>YML配置</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">zuul:</span><br><span class="line">  routes:</span><br><span class="line">    user:</span><br><span class="line">      path: /demo/**  #配置/demo 当访问localhost:8080/demo时重定向到下面的url地址</span><br><span class="line">      url: http://heimamba.com</span><br></pre></td></tr></table></figure>
+<p><strong>路径匹配：</strong><br>在Zuul中，路由匹配的路径表达式采用了Ant风格定义。Ant风格的路径表达式使用起来非常简单，它一共有下面这三种通配符：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">？</td>
+<td style="text-align:left">匹配任意的单个字符</td>
+</tr>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:left">匹配任意数量的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">**</td>
+<td style="text-align:left">匹配任意数量的字符，支持多级目录</td>
+</tr>
+</tbody>
+</table>
+<h4 id="启动访问"><a href="#启动访问" class="headerlink" title="启动访问"></a>启动访问</h4><p>页面输入 localhost:8080/demo 出现以下：<br><img src="/2017/08/10/SpringCloud-zuul/1.png" alt=""><br>说明配置生效，控制台打印: <code>Mapped URL path [/demo/**] onto handler of type [class org.springframework.cloud.netflix.zuul.web.ZuulController]</code></p>
+<p>当访问不存在的地址时会出现：<code>No route found for uri: /lib/fancybox/source/jquery.fancybox.css</code></p>
+<h3 id="服务化"><a href="#服务化" class="headerlink" title="服务化"></a>服务化</h3><p>在微服务架构中，服务名和服务实例的地址关系已经在eureka中存在了，只需要将zuul注册到eureka中就可以发现服务了。无需其他配置，zuul就可以自动寻找eureka上的服务了。<br>默认的访问地址为：<a href="http://zuul的ip:zuul的端口/eureka的服务名称/*" target="_blank" rel="noopener">http://zuul的ip:zuul的端口/eureka的服务名称/*</a>*</p>
+<h4 id="启动eureka"><a href="#启动eureka" class="headerlink" title="启动eureka"></a>启动eureka</h4><p><img src="/2017/08/10/SpringCloud-zuul/2.png" alt=""></p>
+<h4 id="启动producer注册到eureka"><a href="#启动producer注册到eureka" class="headerlink" title="启动producer注册到eureka"></a>启动producer注册到eureka</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/message/&#123;name&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">(@PathVariable String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name + <span class="string">"  测试！"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/08/10/SpringCloud-zuul/3.png" alt=""></p>
+<p>服务已经注册到eureka上</p>
+<h4 id="zuul的服务化"><a href="#zuul的服务化" class="headerlink" title="zuul的服务化"></a>zuul的服务化</h4><p><strong>POM：</strong><br>增加eureka的依赖<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-eureka<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>YML配置：</strong><br>增加eureka的地址<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8002</span><br><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http://localhost:9001/eureka/,http://localhost:9002/eureka/,http://localhost:9003/eureka/</span><br></pre></td></tr></table></figure></p>
+<p><strong>启动类：</strong><br>增加<code>@EnableDiscoveryClient</code>注解，注册到eureka上<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableZuulProxy</span></span><br><span class="line"><span class="meta">@EnableDiscoveryClient</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(Application.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>启动测试</strong><br><img src="/2017/08/10/SpringCloud-zuul/4.png" alt=""><br>已经注册成功。<br>访问localhost:8002/message-server/message/lisi<br><img src="/2017/08/10/SpringCloud-zuul/5.png" alt=""><br>当将zuul注册到eureka上的时候，zuul会自动发现服务，无需我们配置。<br>Zuul的路由规则如下：</p>
+<p><a href="http://ZUUL_HOST:ZUUL_PORT/微服务在Eureka上的serviceId/**会被转发到serviceId对应的微服务" target="_blank" rel="noopener">http://ZUUL_HOST:ZUUL_PORT/微服务在Eureka上的serviceId/**会被转发到serviceId对应的微服务</a></p>
+<h3 id="zuul的过滤器"><a href="#zuul的过滤器" class="headerlink" title="zuul的过滤器"></a>zuul的过滤器</h3><p>Filter是Zuul的核心，用来实现对外服务的控制。Filter的生命周期有4个，分别是“PRE”、“ROUTING”、“POST”、“ERROR”，整个生命周期可以用下图来表示。<br><img src="/2017/08/10/SpringCloud-zuul/6.png" alt=""><br>Zuul大部分功能都是通过过滤器来实现的，这些过滤器类型对应于请求的典型生命周期。</p>
+<ul>
+<li><strong>PRE：</strong> 这种过滤器在请求被路由之前调用。我们可利用这种过滤器实现身份验证、在集群中选择请求的微服务、记录调试信息等。</li>
+<li><strong>ROUTING：</strong>这种过滤器将请求路由到微服务。这种过滤器用于构建发送给微服务的请求，并使用Apache HttpClient或Netfilx Ribbon请求微服务。</li>
+<li><strong>POST：</strong>这种过滤器在路由到微服务以后执行。这种过滤器可用来为响应添加标准的HTTP Header、收集统计信息和指标、将响应从微服务发送给客户端等。<br>-<strong> ERROR：</strong>在其他阶段发生错误时执行该过滤器。 除了默认的过滤器类型，Zuul还允许我们创建自定义的过滤器类型。例如，我们可以定制一种STATIC类型的过滤器，直接在Zuul中生成响应，而不将请求转发到后端的微服务。</li>
+</ul>
+<h4 id="自定义的Filter"><a href="#自定义的Filter" class="headerlink" title="自定义的Filter"></a>自定义的Filter</h4><p>实现自定义Filter，需要继承ZuulFilter的类，并覆盖其中的4个方法。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFilter</span> <span class="keyword">extends</span> <span class="title">ZuulFilter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">String <span class="title">filterType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"pre"</span>; <span class="comment">//定义filter的类型，有pre、route、post、error四种</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">filterOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span>; <span class="comment">//定义filter的顺序，数字越小表示顺序越高，越先执行</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">shouldFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">//表示是否需要执行该filter，true表示执行，false表示不执行</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">Object <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>; <span class="comment">//filter需要执行的具体操作</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyFilter</span> <span class="keyword">extends</span> <span class="title">ZuulFilter</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">filterType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"pre"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">filterOrder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        RequestContext context = RequestContext.getCurrentContext();</span><br><span class="line">        HttpServletRequest request = context.getRequest();</span><br><span class="line">		<span class="comment">//当请求有token时 放行，否则 不放行</span></span><br><span class="line">        String token = request.getParameter(<span class="string">"token"</span>);</span><br><span class="line">        <span class="keyword">if</span>(StringUtils.isNotBlank(token))&#123;</span><br><span class="line">            context.setSendZuulResponse(<span class="keyword">true</span>);</span><br><span class="line">            context.setResponseStatusCode(<span class="number">200</span>);</span><br><span class="line">            context.set(<span class="string">"data"</span>, <span class="keyword">true</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            context.setSendZuulResponse(<span class="keyword">false</span>);</span><br><span class="line">            context.setResponseStatusCode(<span class="number">400</span>);</span><br><span class="line">            context.set(<span class="string">"data"</span>, <span class="keyword">false</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>将自定义filter加入拦截队列中：</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FilterConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyFilter <span class="title">getMyFilter</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MyFilter();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>pom配置：</strong><br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8080</span><br><span class="line">zuul:</span><br><span class="line">  routes:</span><br><span class="line">    user:</span><br><span class="line">      path: /demo/**</span><br><span class="line">      url: http://heimamba.com</span><br></pre></td></tr></table></figure></p>
+<p><strong>启动项目：</strong><br>访问：<a href="http://localhost:8080/demo,页面无法正常访问" target="_blank" rel="noopener">http://localhost:8080/demo,页面无法正常访问</a><br><img src="/2017/08/10/SpringCloud-zuul/7.png" alt=""></p>
+<p>访问：<a href="http://localhost:8080/demo&amp;token=xxx，页面可以正常访问" target="_blank" rel="noopener">http://localhost:8080/demo&amp;token=xxx，页面可以正常访问</a><br><img src="/2017/08/10/SpringCloud-zuul/8.png" alt=""></p>
+<p>使用“PRE”类型的Filter做很多的验证工作，在实际使用中我们可以结合shiro、oauth2.0等技术去做鉴权、验证。</p>
+<h4 id="路由熔断"><a href="#路由熔断" class="headerlink" title="路由熔断"></a>路由熔断</h4><p>当后端服务出现故障时候，我们希望降级操作，而不是传递给最外层，zuul提供了熔断功能。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ZuulFallbackProvider</span> </span>&#123;</span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * The route this fallback will be used for.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> The route the fallback will be used for.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getRoute</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Provides a fallback response.</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span> The fallback response.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> ClientHttpResponse <span class="title">fallbackResponse</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现类通过实现getRoute方法，告诉Zuul它是负责哪个route定义的熔断。而fallbackResponse方法则是告诉 Zuul 断路出现时，它会提供一个什么返回值来处理请求。</p>
+<p><strong>自定义熔断:</strong><br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ZuulFallBack</span> <span class="keyword">implements</span> <span class="title">ZuulFallbackProvider</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getRoute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"message-server"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ClientHttpResponse <span class="title">fallbackResponse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ClientHttpResponse() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> HttpStatus <span class="title">getStatusCode</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> HttpStatus.OK;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getRawStatusCode</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">200</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">getStatusText</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">"sucess"</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> InputStream <span class="title">getBody</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">                <span class="comment">//出现异常时候</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> ByteArrayInputStream(<span class="string">"this is bad request"</span>.getBytes());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> HttpHeaders <span class="title">getHeaders</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                HttpHeaders headers = <span class="keyword">new</span> HttpHeaders();</span><br><span class="line">                headers.setContentType(MediaType.APPLICATION_JSON);</span><br><span class="line">                <span class="keyword">return</span> headers;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>yml配置：</strong><br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8004</span><br><span class="line">eureka:</span><br><span class="line">  client:</span><br><span class="line">    service-url:</span><br><span class="line">      defaultZone: http://localhost:9001/eureka/,http://localhost:9002/eureka/</span><br></pre></td></tr></table></figure></p>
+<p>继续用上面的eureka的producer：<br><img src="/2017/08/10/SpringCloud-zuul/9.png" alt=""></p>
+<p><strong>启动项目：</strong><br>访问：<a href="http://localhost:8004/message-server/message/liss" target="_blank" rel="noopener">http://localhost:8004/message-server/message/liss</a><br><img src="/2017/08/10/SpringCloud-zuul/10.png" alt=""><br>可以正常访问。<br>关闭message-server服务，再次访问：<a href="http://localhost:8004/message-server/message/liss" target="_blank" rel="noopener">http://localhost:8004/message-server/message/liss</a><br><img src="/2017/08/10/SpringCloud-zuul/11.png" alt=""><br>熔断说明已经起到作用。</p>
+<p><strong>Zuul 目前只支持服务级别的熔断，不支持具体到某个URL进行熔断。</strong></p>
+<h3 id="路由重试"><a href="#路由重试" class="headerlink" title="路由重试"></a>路由重试</h3><p>有时候因为网络或者其它原因，服务可能会暂时的不可用，这个时候我们希望可以再次对服务进行重试，Zuul也帮我们实现了此功能，需要结合Spring Retry 一起来实现.</p>
+<h4 id="pom依赖"><a href="#pom依赖" class="headerlink" title="pom依赖"></a>pom依赖</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.retry<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-retry<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="开启重试"><a href="#开启重试" class="headerlink" title="开启重试"></a>开启重试</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">zuul:</span><br><span class="line">  retryable: true</span><br><span class="line">ribbon:</span><br><span class="line">  MaxAutoRetries: 2</span><br><span class="line">  MaxAutoRetriesNextServer: 0</span><br></pre></td></tr></table></figure>
+<h4 id="修改-producer"><a href="#修改-producer" class="headerlink" title="修改 producer"></a>修改 producer</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageController</span> </span>&#123;</span><br><span class="line">    Logger logger = (Logger) LoggerFactory.getLogger(MessageController.class);</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/message/&#123;name&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">(@PathVariable String name)</span></span>&#123;</span><br><span class="line">        logger.info(<span class="string">"request name is "</span>+name);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> name + <span class="string">"  测试！"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h4><p>访问： <a href="http://localhost:8004/message-server/message/liss" target="_blank" rel="noopener">http://localhost:8004/message-server/message/liss</a><br>2017-08-10 19:50:32.401  INFO 19488 — [io-9001-exec-14] o.s.c.n.z.f.route.FallbackProvider   : request name is liss</p>
+<p>2017-08-10 19:50:33.402  INFO 19488 — [io-9001-exec-15] o.s.c.n.z.f.route.FallbackProvider   : request name is liss</p>
+<p>2017-08-10 19:50:34.404  INFO 19488 — [io-9001-exec-16] o.s.c.n.z.f.route.FallbackProvider   : request name is liss</p>
+<p>说明进行了三次的请求，也就是进行了两次的重试。这样也就验证了我们的配置信息，完成了Zuul的重试功能。</p>
+<h3 id="zuul的高可用"><a href="#zuul的高可用" class="headerlink" title="zuul的高可用"></a>zuul的高可用</h3><p><img src="/2017/08/10/SpringCloud-zuul/13.png" alt=""></p>
+<p>不同的客户端使用不同的负载将请求分发到后端的Zuul，Zuul在通过Eureka调用后端服务，最后对外输出。因此为了保证Zuul的高可用性，前端可以同时启动多个Zuul实例进行负载，在Zuul的前端使用Nginx或者F5进行负载转发以达到高可用性。</p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringCloud/" rel="tag"><i class="fa fa-tag"></i> SpringCloud</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/07/SpringCloud-config/" rel="next" title="Spring Cloud-config">
+                <i class="fa fa-chevron-left"></i> Spring Cloud-config
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/31/RocketMQ-transaction/" rel="prev" title="rocketMQ的分布式事务一致性">
+                rocketMQ的分布式事务一致性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Cloud-zuul"><span class="nav-text">Spring Cloud-zuul</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单实用"><span class="nav-text">简单实用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#POM依赖"><span class="nav-text">POM依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动类"><span class="nav-text">启动类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#YML配置"><span class="nav-text">YML配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动访问"><span class="nav-text">启动访问</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务化"><span class="nav-text">服务化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动eureka"><span class="nav-text">启动eureka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动producer注册到eureka"><span class="nav-text">启动producer注册到eureka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zuul的服务化"><span class="nav-text">zuul的服务化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zuul的过滤器"><span class="nav-text">zuul的过滤器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义的Filter"><span class="nav-text">自定义的Filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-text">实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由熔断"><span class="nav-text">路由熔断</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由重试"><span class="nav-text">路由重试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pom依赖"><span class="nav-text">pom依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开启重试"><span class="nav-text">开启重试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改-producer"><span class="nav-text">修改 producer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动项目"><span class="nav-text">启动项目</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zuul的高可用"><span class="nav-text">zuul的高可用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,Dubbo,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Dubbo是什么Dubbo是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。 Dubbo是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。">
+<meta name="keywords" content="SpringBoot,Dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 集成Dubbo">
+<meta property="og:url" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="Dubbo是什么Dubbo是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。 Dubbo是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/90b90a9a66b74a8287a18f157b136731.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/bda3356bfed5414f8181aee7af6f16aa.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/c95ae46b260241239368f988dc8d538c.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/8f0ad31361304293a97406e58ed793c6.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/5fc9021345d244889361c0e930f588da.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/af06c5f608d74f0c89f282c83e7e44e1.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.284Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 集成Dubbo">
+<meta name="twitter:description" content="Dubbo是什么Dubbo是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。 Dubbo是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/90b90a9a66b74a8287a18f157b136731.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/">
+
+
+
+
+
+  <title>SpringBoot 集成Dubbo | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/05/25/SpringBoot-dubbo/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SpringBoot 集成Dubbo</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-25T20:36:47+08:00">
+                2017-05-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Dubbo是什么"><a href="#Dubbo是什么" class="headerlink" title="Dubbo是什么"></a>Dubbo是什么</h2><p>Dubbo是阿里巴巴SOA服务化治理方案的核心框架，每天为2,000+个服务提供3,000,000,000+次访问量支持，并被广泛应用于阿里巴巴集团的各成员站点。</p>
+<p>Dubbo是一个分布式服务框架，致力于提供高性能和透明化的RPC远程服务调用方案，以及SOA服务治理方案。<br><a id="more"></a></p>
+<h3 id="其核心部分包含"><a href="#其核心部分包含" class="headerlink" title="其核心部分包含:"></a>其核心部分包含:</h3><p>远程通讯: 提供对多种基于长连接的NIO框架抽象封装，包括多种线程模型，序列化，以及“请求-响应”模式的信息交换方式。<br>集群容错: 提供基于接口方法的透明远程过程调用，包括多协议支持，以及软负载均衡，失败容错，地址路由，动态配置等集群支持。<br>自动发现: 基于注册中心目录服务，使服务消费方能动态的查找服务提供方，使地址透明，使服务提供方可以平滑增加或减少机器。</p>
+<h2 id="Dubbo能做什么？"><a href="#Dubbo能做什么？" class="headerlink" title="Dubbo能做什么？"></a>Dubbo能做什么？</h2><p>透明化的远程方法调用，就像调用本地方法一样调用远程方法，只需简单配置，没有任何API侵入。<br>软负载均衡及容错机制，可在内网替代F5等硬件负载均衡器，降低成本，减少单点。<br>服务自动注册与发现，不再需要写死服务提供方地址，注册中心基于接口名查询服务提供者的IP地址，并且能够平滑添加或删除服务提供者。</p>
+<p><img src="/2017/05/25/SpringBoot-dubbo/90b90a9a66b74a8287a18f157b136731.jpg" alt=""><br>我的理解就是，服务生产者注册自己的服务，生产者消费自己所需要的服务，注册中心将服务提供者给消费者，如果调用失败，会再返回一台给消费者，实现负载均衡和高可用。</p>
+<h2 id="系统角色"><a href="#系统角色" class="headerlink" title="系统角色"></a>系统角色</h2><p>Provider: 暴露服务的服务提供方。<br>Consumer: 调用远程服务的服务消费方。<br>Registry: 服务注册与发现的注册中心。<br>Monitor: 统计服务的调用次调和调用时间的监控中心。<br>Container: 服务运行容器。</p>
+<h2 id="注册中心"><a href="#注册中心" class="headerlink" title="注册中心"></a>注册中心</h2><p>Multicast注册中心<br>Zookeeper注册中心<br>Redis注册中心<br>Simple注册中心</p>
+<h3 id="Zookeeper注册中心"><a href="#Zookeeper注册中心" class="headerlink" title="Zookeeper注册中心"></a>Zookeeper注册中心</h3><p>Zookeeper是一个分布式的服务框架，是树型的目录服务的数据存储，能做到集群管理数据 ，这里能很好的作为Dubbo服务的注册中心。</p>
+<p>Dubbo能与Zookeeper做到集群部署，当提供者出现断电等异常停机时，Zookeeper注册中心能自动删除提供者信息，当提供者重启时，能自动恢复注册数据，以及订阅请求。</p>
+<h2 id="安装Dubbo"><a href="#安装Dubbo" class="headerlink" title="安装Dubbo"></a>安装Dubbo</h2><h3 id="安装Zookeeper"><a href="#安装Zookeeper" class="headerlink" title="安装Zookeeper"></a>安装Zookeeper</h3><p>zk下载地址：<a href="https://www.apache.org/dyn/closer.cgi/zookeeper/" title="https://www.apache.org/dyn/closer.cgi/zookeeper/" target="_blank" rel="noopener">https://www.apache.org/dyn/closer.cgi/zookeeper/</a></p>
+<p>解压 zookeeper-3.4.5.tar.gz<br>进入到zookeeper-3.4.5/conf中将zoo_simple.cfg 复制一份为zoo.cfg<br>设置dataDir dataDir=/apps/zookeeper-3.4.5/data<br>设置dataLogDir dataLogDir=/apps/zookeeper-3.4.5/logs<br>设置server.1=localhost:2888:3888  第一个端口为通信端口，进行信息交换，第二个leader选举的端口。</p>
+<p>注意：zookeeper只支持单数工作，不支持双数工作。</p>
+<p>启动  ./zkServer.sh start</p>
+<h3 id="dubbo-admin"><a href="#dubbo-admin" class="headerlink" title="dubbo-admin"></a>dubbo-admin</h3><p>安装因为zookeeper只是一个黑框，我们无法看到是否存在了什么提供者或消费者，这时就要借助Dubbo-Admin管理平台来实时的查看，也可以通过这个平台来管理提者和消费者。<br>dubbo的所有源码可在 <a href="https://github.com/alibaba/dubbo" title="https://github.com/alibaba/dubbo" target="_blank" rel="noopener">https://github.com/alibaba/dubbo</a> 上下载<br>之后进入到dubbo-admin里面利用maven打包。<br><code>mvn package -Dmaven.skip.test=true</code><br>将打包好的war包放在tomcat下启动，注意修改<img src="/2017/05/25/SpringBoot-dubbo/bda3356bfed5414f8181aee7af6f16aa.png" alt=""><br><img src="/2017/05/25/SpringBoot-dubbo/c95ae46b260241239368f988dc8d538c.png" alt=""><br>的zookeeper地址。<br><img src="/2017/05/25/SpringBoot-dubbo/8f0ad31361304293a97406e58ed793c6.png" alt=""><br>当前没有服务。</p>
+<h2 id="服务提供者代码"><a href="#服务提供者代码" class="headerlink" title="服务提供者代码"></a>服务提供者代码</h2><h3 id="POM文件："><a href="#POM文件：" class="headerlink" title="POM文件："></a>POM文件：</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>dubbo-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.zookeeper<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>zookeeper<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.4.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.101tec<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>zkclient<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="yaml文件："><a href="#yaml文件：" class="headerlink" title="yaml文件："></a>yaml文件：</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8100</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  dubbo:</span></span><br><span class="line"><span class="attr">    application:</span></span><br><span class="line"><span class="attr">      id:</span> <span class="string">liss</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">liss</span></span><br><span class="line"><span class="attr">    registry:</span></span><br><span class="line"><span class="attr">      address:</span> <span class="attr">zookeeper://182.61.34.13:2181</span></span><br><span class="line"><span class="attr">    protocol:</span></span><br><span class="line"><span class="attr">      id:</span> <span class="string">dubbo</span></span><br><span class="line"><span class="attr">      name:</span> <span class="string">dubbo</span></span><br><span class="line"><span class="attr">      port:</span> <span class="number">20881</span></span><br><span class="line">      <span class="string">status</span> <span class="string">:</span> <span class="string">server</span></span><br><span class="line"><span class="attr">    scan:</span> <span class="string">com.lls.server.impl</span></span><br></pre></td></tr></table></figure>
+<h3 id="启动类："><a href="#启动类：" class="headerlink" title="启动类："></a>启动类：</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@CrossOrigin</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableDubboConfiguration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProduceServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ProduceServer.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="服务接口："><a href="#服务接口：" class="headerlink" title="服务接口："></a>服务接口：</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lls.server;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DubboServer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="服务实现："><a href="#服务实现：" class="headerlink" title="服务实现："></a>服务实现：</h3><p>@Service提供参数如下：<br>  version = “1.0.0”,<br>  application = “${dubbo.application.id}”,<br>  protocol = “${dubbo.protocol.id}”,<br>  registry = “${dubbo.registry.id}”<br>  这里使用version，value自定义，用来区分服务。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span>(<span class="string">"dubboServer"</span>)</span><br><span class="line"><span class="meta">@Service</span>(version = <span class="string">"1.0.0"</span>, interfaceClass = DubboServer.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DubboServerImpl</span> <span class="keyword">implements</span> <span class="title">DubboServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Dubbo "</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动服务："><a href="#启动服务：" class="headerlink" title="启动服务："></a>启动服务：</h3><p><img src="/2017/05/25/SpringBoot-dubbo/5fc9021345d244889361c0e930f588da.png" alt=""></p>
+<p><img src="/2017/05/25/SpringBoot-dubbo/af06c5f608d74f0c89f282c83e7e44e1.png" alt=""><br>服务已经注册！</p>
+<h2 id="调用者代码："><a href="#调用者代码：" class="headerlink" title="调用者代码："></a>调用者代码：</h2><h3 id="YML文件："><a href="#YML文件：" class="headerlink" title="YML文件："></a>YML文件：</h3><p>和服务者一致。注意服务端口。</p>
+<h3 id="POM-文件："><a href="#POM-文件：" class="headerlink" title="POM 文件："></a>POM 文件：</h3><p>和服务者一致。</p>
+<h3 id="调用代码："><a href="#调用代码：" class="headerlink" title="调用代码："></a>调用代码：</h3><p>通过@Reference注解来调用。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClientServerImpl</span> <span class="keyword">implements</span> <span class="title">ClientServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Reference</span>(version = <span class="string">"1.0.0"</span>)</span><br><span class="line">    <span class="keyword">private</span> DubboServer dubboServer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">conService</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> dubboServer.getName(name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动调用者"><a href="#启动调用者" class="headerlink" title="启动调用者"></a>启动调用者</h3><p>打开 localhost:8111/dubbo/liss 返回 Dubbo liss.</p>
+<p>搭建成功。</p>
+<p>在上面的调用中，我们是在服务提供者和调用者里面都写了DubboServer这个接口，在实际开发中，我们是将需要提供的服务类的接口抽象成一个api，多个服务实现这个api，每个服务有自己的标示，在调用者使用的时候，根据标示来区分自己是需要哪一个服务，就调用哪一个服务。</p>
+<p>源码地址：<a href="https://github.com/llss6887/springboot/tree/master/springbootdubbo" title="**戳这里**" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/Dubbo/" rel="tag"><i class="fa fa-tag"></i> Dubbo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/24/activeMQ-ha/" rel="next" title="ActiveMQ 的高可用">
+                <i class="fa fa-chevron-left"></i> ActiveMQ 的高可用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/16/RocketMQ/" rel="prev" title="RocketMQ 的使用">
+                RocketMQ 的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo是什么"><span class="nav-text">Dubbo是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#其核心部分包含"><span class="nav-text">其核心部分包含:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dubbo能做什么？"><span class="nav-text">Dubbo能做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统角色"><span class="nav-text">系统角色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册中心"><span class="nav-text">注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper注册中心"><span class="nav-text">Zookeeper注册中心</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Dubbo"><span class="nav-text">安装Dubbo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Zookeeper"><span class="nav-text">安装Zookeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo-admin"><span class="nav-text">dubbo-admin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务提供者代码"><span class="nav-text">服务提供者代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#POM文件："><span class="nav-text">POM文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yaml文件："><span class="nav-text">yaml文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动类："><span class="nav-text">启动类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务接口："><span class="nav-text">服务接口：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务实现："><span class="nav-text">服务实现：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动服务："><span class="nav-text">启动服务：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用者代码："><span class="nav-text">调用者代码：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#YML文件："><span class="nav-text">YML文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POM-文件："><span class="nav-text">POM 文件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用代码："><span class="nav-text">调用代码：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动调用者"><span class="nav-text">启动调用者</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,SpringBoot,Docker,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare metal、OpenStack 集群和其他的基础应用平台。">
+<meta name="keywords" content="java,SpringBoot,Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用Docker部署springBoot应用">
+<meta property="og:url" content="https://llss6887.github.io/2018/09/22/docker-springboot/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="简介Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare metal、OpenStack 集群和其他的基础应用平台。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/82b6146d0e5f4a91886fa68384fe8e26.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/55930b576ef540fdaed3e883383196a3.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/0ef85b2fc4e342868ce0cee3c4a2534b.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/48ce68768d094135b4ed332b082c6fc6.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/eadfc943540a4040ac0add5f269c61e0.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/a6474bd045454144b799568098555fe3.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/c9b7eff9a4d84444bf49577b2882cfd5.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/9777d8876a544b3b960e4a69eb8bb147.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/35463eb5370e43c4bde011769577e3c4.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/e0a06dd557ba4fe49d36b3895d052bee.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.340Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用Docker部署springBoot应用">
+<meta name="twitter:description" content="简介Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare metal、OpenStack 集群和其他的基础应用平台。">
+<meta name="twitter:image" content="https://llss6887.github.io/2018/09/22/docker-springboot/82b6146d0e5f4a91886fa68384fe8e26.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2018/09/22/docker-springboot/">
+
+
+
+
+
+  <title>利用Docker部署springBoot应用 | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2018/09/22/docker-springboot/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">利用Docker部署springBoot应用</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-22T20:36:47+08:00">
+                2018-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/09/22/docker-springboot/82b6146d0e5f4a91886fa68384fe8e26.png" alt=""></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h2><p>Docker是一个开源的引擎，可以轻松的为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署，包括VMs（虚拟机）、bare metal、OpenStack 集群和其他的基础应用平台。<br><a id="more"></a></p>
+<h2 id="Docker通常用于如下场景："><a href="#Docker通常用于如下场景：" class="headerlink" title="Docker通常用于如下场景："></a><strong>Docker通常用于如下场景：</strong></h2><p>web应用的自动化打包和发布；<br>自动化测试和持续集成、发布；<br>在服务型环境中部署和调整数据库或其他的后台应用；<br>从头编译或者扩展现有的OpenShift或Cloud Foundry平台来搭建自己的PaaS环境。</p>
+<h2 id="Docker-的优点"><a href="#Docker-的优点" class="headerlink" title="Docker 的优点"></a><strong>Docker 的优点</strong></h2><h3 id="1、简化程序："><a href="#1、简化程序：" class="headerlink" title="1、简化程序："></a>1、简化程序：</h3><p>Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化。Docker改变了虚拟化的方式，使开发者可以直接将自己的成果放入Docker中进行管理。方便快捷已经是 Docker的最大优势，过去需要用数天乃至数周的    任务，在Docker容器的处理下，只需要数秒就能完成。</p>
+<h3 id="2、避免选择恐惧症："><a href="#2、避免选择恐惧症：" class="headerlink" title="2、避免选择恐惧症："></a>2、避免选择恐惧症：</h3><p>如果你有选择恐惧症，还是资深患者。Docker 帮你    打包你的纠结！比如 Docker 镜像；Docker 镜像中包含了运行环境和配置，所以 Docker 可以简化部署多种应用实例工作。比如 Web 应用、后台应用、数据库应用、大数据应用比如 Hadoop 集群、消息队列等等都可以打包成一个镜像部署。</p>
+<h3 id="3、节省开支："><a href="#3、节省开支：" class="headerlink" title="3、节省开支："></a>3、节省开支：</h3><p>一方面，云计算时代到来，使开发者不必为了追求效果而配置高额的硬件，Docker 改变了高性能必然高价格的思维定势。Docker 与云的结合，让云空间得到更充分的利用。不仅解决了硬件管理的问题，也改变了虚拟化的方式。</p>
+<h2 id="Docker-架构"><a href="#Docker-架构" class="headerlink" title="Docker 架构"></a><strong>Docker 架构</strong></h2><p>Docker 使用客户端-服务器 (C/S) 架构模式，使用远程API来管理和创建Docker容器。<br>Docker 容器通过 Docker 镜像来创建。<br>容器与镜像的关系类似于面向对象编程中的对象与类。</p>
+<table>
+<thead>
+<tr>
+<th>Docker</th>
+<th>面向对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>镜像</td>
+<td>类</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/2018/09/22/docker-springboot/55930b576ef540fdaed3e883383196a3.png" alt=""></p>
+<h2 id="CentOS-Docker-安装"><a href="#CentOS-Docker-安装" class="headerlink" title="CentOS Docker 安装"></a><strong>CentOS Docker 安装</strong></h2><p>Docker支持以下的CentOS版本：<br>CentOS 7 (64-bit)<br>CentOS 6.5 (64-bit) 或更高的版本</p>
+<h3 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a><strong>前提条件</strong></h3><ol>
+<li>目前，CentOS 仅发行版本中的内核支持 Docker。</li>
+<li>Docker 运行在 CentOS 7 上，要求系统为64位、系统内核版本为 3.10 以上。</li>
+<li>Docker 运行在 CentOS-6.5 或更高的版本的 CentOS 上，要求系统为64位、系统内核版本为 2.6.32-431 或者更高版本。</li>
+</ol>
+<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a><strong>安装 Docker</strong></h3><p>安装一些必要的系统工具：</p>
+<p><code>sudo yum install -y yum-utils device-mapper-persistent-data lvm2</code></p>
+<p>安装Docker：<br><code>yum install docker-io</code></p>
+<p>查看Docker版本：<br> <code>docker -v</code></p>
+<p>启动docker：<br><code>systemctl start docker</code></p>
+<p>镜像加速：<br>由于docker默认使用的国外的镜像，所以网速感人，我们替换为国内的镜像，国内镜像，一般有网易，阿里云等等，这里使用网易的镜像。<br>在   /etc/docker/daemon.json添加一下内容即可：</p>
+<p><code>{
+  &quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;]
+}</code></p>
+<p>查找镜像：<br>这里使用hello-world的镜像<br><code>docker search hello-world</code></p>
+<p>如果要查找nginx的镜像  将hello-world替换成nginx即可。<br><img src="/2018/09/22/docker-springboot/0ef85b2fc4e342868ce0cee3c4a2534b.png" alt=""></p>
+<p>拉取镜像：<br><code>docker pull docker.io/hello-world</code></p>
+<p>之后查看镜像是否拉取成功：<br><code>docker images</code><br><img src="/2018/09/22/docker-springboot/48ce68768d094135b4ed332b082c6fc6.png" alt=""></p>
+<p>运行刚才拉取的hello：<br><code>docker run hello-world</code><img src="/2018/09/22/docker-springboot/eadfc943540a4040ac0add5f269c61e0.png" alt=""></p>
+<p>到这里 一个完整的Docker就搭建完成了，如果想更深入了解 Docker的其他东西， <strong><a href="https://www.docker.com/" title="点击这里" target="_blank" rel="noopener">点击这里</a></strong>  自行学习。</p>
+<h3 id="下面来看Docker如何部署一个springboot应用："><a href="#下面来看Docker如何部署一个springboot应用：" class="headerlink" title="下面来看Docker如何部署一个springboot应用："></a><strong>下面来看Docker如何部署一个springboot应用：</strong></h3><p><strong>具体步骤如下：</strong><br>1.创建一个springboot应用<br>2.创建一个java的docker容器<br>3.将springboot应用和docker容器进行关联<br>4.启动这个docker容器</p>
+<p>springboot应用代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/demo"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FirstDocker</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/index"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">firstPage</span><span class="params">(HttpServletRequest request)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"demo/index"</span>;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span>(exclude = &#123;DataSourceAutoConfiguration.class&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(AppServer.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Title<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>this is my firstDocker<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.1.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-thymeleaf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis.spring.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 1、设置jar的入口类 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-jar-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">archive</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">manifest</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">addClasspath</span>&gt;</span>true<span class="tag">&lt;/<span class="name">addClasspath</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">classpathPrefix</span>&gt;</span>lib/<span class="tag">&lt;/<span class="name">classpathPrefix</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">mainClass</span>&gt;</span>com.kjlink.AppServer<span class="tag">&lt;/<span class="name">mainClass</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">manifest</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">archive</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="comment">&lt;!--2、把附属的jar打到jar内部的lib目录中 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-dependency-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">executions</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">execution</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">id</span>&gt;</span>copy-dependencies<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">phase</span>&gt;</span>package<span class="tag">&lt;/<span class="name">phase</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">goals</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">goal</span>&gt;</span>copy-dependencies<span class="tag">&lt;/<span class="name">goal</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">goals</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">                            <span class="tag">&lt;<span class="name">outputDirectory</span>&gt;</span>$&#123;project.build.directory&#125;/lib<span class="tag">&lt;/<span class="name">outputDirectory</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">execution</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">executions</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>访问 localhost:8080/demo/index<br><img src="/2018/09/22/docker-springboot/a6474bd045454144b799568098555fe3.png" alt=""></p>
+<p>在服务器创建docker文件夹<br>通过maven打包成jar包并上传到服务器<br>在docker文件夹下创建Dockerfile文件<br>Docker文件内容如下:</p>
+<pre><code>FROM java:8   #带边拉取java的镜像 必须写
+MAINTAINER &quot;liss&quot;&lt;168337573@qq.com&gt; #作者名称 必须写
+WORKDIR  /tmp  #工作的目录
+ADD ./app.jar app.jar #将本地的jar包添加在docker容器中
+EXPOSE 8080  #容器启动的端口
+CMD java -jar app.jar  #启动jar的命令
+</code></pre><p>之后  执行一下命令：</p>
+<p><code>docker build -t firstdocker:v1 .</code></p>
+<ul>
+<li>build：代表构建docker容器</li>
+<li>-t:指定容器的名称</li>
+<li>.：说明Dockerfile文件在当前目录</li>
+</ul>
+<p><img src="/2018/09/22/docker-springboot/c9b7eff9a4d84444bf49577b2882cfd5.png" alt=""><br>说明这个镜像已经构建完毕。下面我们启动。</p>
+<p><code>docker run -d -p 8080:8080 firstdocker:v1</code></p>
+<p>-d:表示后台运行<br>-p:表示宿主机和容器的端口映射，第一个8080为宿主机对外的端口，第二个8080为容器启动后的端口</p>
+<p><code>docker ps</code><br>来查看是否启动成功。</p>
+<p><img src="/2018/09/22/docker-springboot/9777d8876a544b3b960e4a69eb8bb147.png" alt=""></p>
+<p>我们访问一下是否成功：<br><img src="/2018/09/22/docker-springboot/35463eb5370e43c4bde011769577e3c4.png" alt=""></p>
+<p>成功访问！  我们的第一个docker部署springboot就完成了。</p>
+<p>停止容器<br><code>docker stop aff048d793b7</code></p>
+<p>aff048d793b7：为 容器的启动id</p>
+<p>上面的方式虽然可以部署成功，但不是最佳的方式，因为我们每次需要部署的时候，都要构建，很麻烦，因此docker提供了挂载的功能，我们只要构建好容器，将jar包的路径，日志，等等通过宿主机挂载到docker容器，这样，我们每次部署的时候，只需要替换宿主机的jar包，和重新启动我们的docker容器就可以了。</p>
+<p>具体怎么做呢？很简单，修改我们的Dockerfile文件</p>
+<pre><code>FROM java:8
+MAINTAINER &quot;liss&quot;&lt;168337573@qq.com&gt;
+#ADD ./app.jar app.jar
+RUN mkdir -p /home/apps
+EXPOSE 8082
+CMD java -jar /home/apps/app.jar
+</code></pre><p>将Dockerfile修改成以上，我们在进行构建容器。<br><code>docker build -t firstdocker:v2 .</code></p>
+<p>构建完毕之后，执行命令：<br><code>docker run -d -v /home/docker/:/home/apps/ -p 8081:8080 firstdocker:v2</code></p>
+<p>-v:表示挂载目录，第一个为宿主机的目录，第二个为容器里面的目录<br><img src="/2018/09/22/docker-springboot/e0a06dd557ba4fe49d36b3895d052bee.png" alt=""></p>
+<p>也是没有任何问题的，之后我们每次更新app.jar的时候 ，只需要将/home/docker目录下的app.jar替换掉重新启动容器就可以了，不用每次都构建了。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a><strong>结语</strong></h2><p>docker真的很强大，这篇文章只是介绍的docker的基本使用，docker还提供的任务编排 Docker Compose,集群管理工具Docker Swarm,快速在多种平台上构建环境的Docker Machine,学无止境 每一天都是崭新的最后一天， 努力、加油 。</p>
+<p>源码地址： <a href="https://github.com/llss6887/docker.git" title="**戳这里**" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+<p>博客地址：<a href="https://llss6887.github.io" title=" https://llss6887.github.io"> <strong>https://llss6887.github.io</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/21/gitalkauto/" rel="next" title="Gitalk的自动初始化">
+                <i class="fa fa-chevron-left"></i> Gitalk的自动初始化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/22/docker-compose/" rel="prev" title="Docker Compose部署nginx+springBoot">
+                Docker Compose部署nginx+springBoot <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker通常用于如下场景："><span class="nav-text">Docker通常用于如下场景：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-的优点"><span class="nav-text">Docker 的优点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、简化程序："><span class="nav-text">1、简化程序：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、避免选择恐惧症："><span class="nav-text">2、避免选择恐惧症：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、节省开支："><span class="nav-text">3、节省开支：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-架构"><span class="nav-text">Docker 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS-Docker-安装"><span class="nav-text">CentOS Docker 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提条件"><span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Docker"><span class="nav-text">安装 Docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#下面来看Docker如何部署一个springboot应用："><span class="nav-text">下面来看Docker如何部署一个springboot应用：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

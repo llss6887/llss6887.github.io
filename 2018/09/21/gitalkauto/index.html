@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="gitalk,java,python,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言上篇博客讲了如何集成gitalk，如果你还不会集成gitalk 点击这里  快去集成你的gitalk吧，上次我们还有一个问题没有解决，那就是每次发文之后，需要手动的去初始化gitalk，就去抓了一下gitalk初始化发送的网络请求，自己写一个脚本来实现自动初始化，你也可以嵌到你的博客系统里，每次发新的文章都自动进行初始化，下面我们来看，如何实现。">
+<meta name="keywords" content="gitalk,java,python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gitalk的自动初始化">
+<meta property="og:url" content="https://llss6887.github.io/2018/09/21/gitalkauto/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="前言上篇博客讲了如何集成gitalk，如果你还不会集成gitalk 点击这里  快去集成你的gitalk吧，上次我们还有一个问题没有解决，那就是每次发文之后，需要手动的去初始化gitalk，就去抓了一下gitalk初始化发送的网络请求，自己写一个脚本来实现自动初始化，你也可以嵌到你的博客系统里，每次发新的文章都自动进行初始化，下面我们来看，如何实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/21/gitalkauto/8ac9761909ea434b8671d0c1708bf591.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/21/gitalkauto/a8c6f8022a36430e98de451a20e34a73.png">
+<meta property="og:image" content="https://llss6887.github.io/2018/09/21/gitalkauto/02d5f2c2dd614a75b1fc9c38667c03c4.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.260Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gitalk的自动初始化">
+<meta name="twitter:description" content="前言上篇博客讲了如何集成gitalk，如果你还不会集成gitalk 点击这里  快去集成你的gitalk吧，上次我们还有一个问题没有解决，那就是每次发文之后，需要手动的去初始化gitalk，就去抓了一下gitalk初始化发送的网络请求，自己写一个脚本来实现自动初始化，你也可以嵌到你的博客系统里，每次发新的文章都自动进行初始化，下面我们来看，如何实现。">
+<meta name="twitter:image" content="https://llss6887.github.io/2018/09/21/gitalkauto/8ac9761909ea434b8671d0c1708bf591.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2018/09/21/gitalkauto/">
+
+
+
+
+
+  <title>Gitalk的自动初始化 | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2018/09/21/gitalkauto/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Gitalk的自动初始化</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-21T20:36:47+08:00">
+                2018-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gitalk/" itemprop="url" rel="index">
+                    <span itemprop="name">Gitalk</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  962 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/09/21/gitalkauto/8ac9761909ea434b8671d0c1708bf591.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上篇博客讲了如何集成gitalk，如果你还不会集成gitalk <a href="https://llss6887.github.io/2018/09/20/blog-gitalk/" title="点击这里">点击这里</a>  快去集成你的gitalk吧，上次我们还有一个问题没有解决，那就是每次发文之后，需要手动的去初始化gitalk，就去抓了一下gitalk初始化发送的网络请求，自己写一个脚本来实现自动初始化，你也可以嵌到你的博客系统里，每次发新的文章都自动进行初始化，下面我们来看，如何实现。<br><a id="more"></a></p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>在使用脚本之前，你需要获取一个权限，<a href="https://github.com/settings/tokens" title="Personal access tokens" target="_blank" rel="noopener">Personal access tokens</a>在当前页面为Token添加所有的repo权限<br><img src="/2018/09/21/gitalkauto/a8c6f8022a36430e98de451a20e34a73.png" alt=""></p>
+<p><img src="/2018/09/21/gitalkauto/02d5f2c2dd614a75b1fc9c38667c03c4.png" alt=""><br>这样就获取到了Token，之后我们来看代码</p>
+<p>python版本：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib <span class="keyword">import</span> parse</span><br><span class="line"></span><br><span class="line">username = <span class="string">'git名称'</span></span><br><span class="line">repos = <span class="string">'博客仓库'</span></span><br><span class="line">title = <span class="string">'需要的初始化的博客标题'</span></span><br><span class="line">label = <span class="string">'博客地址的相对路径 例如：/blog/article/121'</span> </span><br><span class="line">domain = <span class="string">'博客首页地址  例如：http://heimamba.com'</span></span><br><span class="line">token = <span class="string">'刚刚获取的Token'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">autoTalk</span><span class="params">(title, label)</span>:</span></span><br><span class="line">    doUrl = <span class="string">'https://api.github.com/repos/%s/%s/issues'</span> % (username, repos)</span><br><span class="line"></span><br><span class="line">    param = <span class="string">"&#123;\"title\":\"%s\",\"labels\":[\"%s\", \"Gitalk\"],\"body\":\"%s%s\\n\\n\"&#125;"</span> % (title, label, domain, label)</span><br><span class="line">    <span class="comment">#param = parse.quote_plus(param)</span></span><br><span class="line">    header = &#123;<span class="string">"accept"</span>: <span class="string">"*/*"</span>, <span class="string">"connection"</span>: <span class="string">"Keep-Alive"</span>,</span><br><span class="line">              <span class="string">"user-agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "</span></span><br><span class="line">                            <span class="string">"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36"</span>,</span><br><span class="line">              <span class="string">"Authorization"</span>: <span class="string">"token %s"</span> % token&#125;</span><br><span class="line">    sesson = requests.session()</span><br><span class="line">    post = sesson.post(doUrl, data=param, headers=header)</span><br></pre></td></tr></table></figure>
+<p>java版本：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.http.HttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.HttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpPost;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.entity.StringEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.HttpClients;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.protocol.HTTP;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GitalkAuto</span> </span>&#123;</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username  git用戶名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> repo git博客的仓库名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> uri 博客地址的相对路径 例如：/blog/article/121</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> blogUrl 博客首页地址  例如：http://heimamba.com</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> title 需要的初始化的博客标题</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> token 获取到的Token</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">autoTalk</span><span class="params">(String username,String repo, String uri, String blogUrl,String title, String token)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        String url = <span class="string">"https://api.github.com/repos/"</span>+username+<span class="string">"/"</span>+repo+<span class="string">"/issues"</span>;</span><br><span class="line">        String param = String.format(<span class="string">"&#123;\"title\":\"%s\",\"labels\":[\"%s\", \"Gitalk\"],\"body\":\"%s%s\\n\\n\"&#125;"</span></span><br><span class="line">                                            , title, uri, blogUrl, uri);</span><br><span class="line">        HttpClient client = HttpClients.createDefault();</span><br><span class="line">        HttpPost post = <span class="keyword">new</span> HttpPost(url);</span><br><span class="line">        StringEntity entity = <span class="keyword">new</span> StringEntity(param, HTTP.UTF_8);</span><br><span class="line">        post.setHeader(<span class="string">"accept"</span>, <span class="string">"*/*"</span>);</span><br><span class="line">        post.setHeader(<span class="string">"connection"</span>, <span class="string">"Keep-Alive"</span>);</span><br><span class="line">        post.setHeader(<span class="string">"user-agent"</span>, <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36"</span>);</span><br><span class="line">        post.setHeader(<span class="string">"Authorization"</span>, <span class="string">"token "</span>+token);</span><br><span class="line">        post.setEntity(entity);</span><br><span class="line">        HttpResponse response = client.execute(post);</span><br><span class="line">        <span class="keyword">return</span> response.getEntity();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的python版本和java版本，分别能初始化自己的博客评论，我的是将代码放到了发布文章的时候，自动初始化。<br>上面只是解决的，单个文章的问题，如果之前是其他评论系统，现在改用gitalk的，那岂不是需要一个个的执行。</p>
+<p>因为我的博客比较简单，我就自己顺手写个批量初始化的，其实就是爬取文章的uri和title然后调用单个的初始化脚本，我的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> talkAuto.TalkAuto <span class="keyword">import</span> autoTalk</span><br><span class="line"></span><br><span class="line">url = <span class="string">'www.heimamba.com'</span></span><br><span class="line">header = &#123;<span class="string">"accept"</span>: <span class="string">"*/*"</span>, <span class="string">"connection"</span>: <span class="string">"Keep-Alive"</span>,</span><br><span class="line">          <span class="string">"user-agent"</span>: <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) "</span></span><br><span class="line">                        <span class="string">"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36"</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">talkAuto</span><span class="params">(title, lable)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> index, value <span class="keyword">in</span> enumerate(title):</span><br><span class="line">        t = value.strip()</span><br><span class="line">        l = lable[index]</span><br><span class="line">        autoTalk(t, l)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_url</span><span class="params">(uri)</span>:</span></span><br><span class="line">    res = requests.get(uri, headers=header)</span><br><span class="line">    html = etree.HTML(res.text)</span><br><span class="line">    xpath = html.xpath(<span class="string">'//*[@class="blog-content"]/a/@href'</span>)</span><br><span class="line">    title = html.xpath(<span class="string">'//*[@id="grid"]/li/section/article/text()'</span>)</span><br><span class="line">    split_ = html.xpath(<span class="string">"//li[@class='next']/a/@href"</span>)</span><br><span class="line">    talkAuto(title,xpath)</span><br><span class="line">    <span class="keyword">if</span> split_:</span><br><span class="line">        split_ = split_[<span class="number">0</span>].split(<span class="string">';'</span>)[<span class="number">0</span>]</span><br><span class="line">        get_url(url+split_)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    get_url(url)</span><br><span class="line">    print(<span class="string">"done"</span>)</span><br></pre></td></tr></table></figure>
+<p>这个脚本只是适合我自己的博客，如果要其他博客也用的话，需要根据自己的实际情况更改xpath的值。</p>
+<p>##结语</p>
+<p>之前刚接触Gitalk的时候，网络上自动化的初始脚本都是ruby，对于我这个学渣来说，只能看个大概，无奈，只能自己写了，好了，希望这篇文章对你们有帮助，下面附上git的自动化gitalk的地址。</p>
+<p>源码地址：<a href="https://github.com/llss6887/talkAuto" title="戳这里" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+<p>博客地址：<a href="https://llss6887.github.io" title=" https://llss6887.github.io"> <strong>https://llss6887.github.io</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gitalk/" rel="tag"><i class="fa fa-tag"></i> gitalk</a>
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/20/blog-gitalk/" rel="next" title="博客集成Gitalk">
+                <i class="fa fa-chevron-left"></i> 博客集成Gitalk
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/22/docker-springboot/" rel="prev" title="利用Docker部署springBoot应用">
+                利用Docker部署springBoot应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-text">正文</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

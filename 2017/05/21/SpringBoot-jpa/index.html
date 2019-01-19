@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,jpa,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="添加依赖添加jar包&amp;lt;dependency&amp;gt;            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;            &amp;lt;artifactId&amp;gt;spring-boot-starter-data-jpa&amp;lt;/artifactId&amp;gt;        &amp;lt;/dependency&amp;gt;">
+<meta name="keywords" content="SpringBoot,jpa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 集成jpa">
+<meta property="og:url" content="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="添加依赖添加jar包&amp;lt;dependency&amp;gt;            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;            &amp;lt;artifactId&amp;gt;spring-boot-starter-data-jpa&amp;lt;/artifactId&amp;gt;        &amp;lt;/dependency&amp;gt;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/ec3a6ec54aec48ef92646f390024a874.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/2eacf09c6bed4545a13abfb380082c10.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.336Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 集成jpa">
+<meta name="twitter:description" content="添加依赖添加jar包&amp;lt;dependency&amp;gt;            &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt;            &amp;lt;artifactId&amp;gt;spring-boot-starter-data-jpa&amp;lt;/artifactId&amp;gt;        &amp;lt;/dependency&amp;gt;">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/ec3a6ec54aec48ef92646f390024a874.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/">
+
+
+
+
+
+  <title>SpringBoot 集成jpa | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/05/21/SpringBoot-jpa/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SpringBoot 集成jpa</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T20:36:47+08:00">
+                2017-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  773 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h2><h3 id="添加jar包"><a href="#添加jar包" class="headerlink" title="添加jar包"></a>添加jar包</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="添加配置文件"><a href="#添加配置文件" class="headerlink" title="添加配置文件"></a>添加配置文件</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://182.61.34.13:3306/jpa_test</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">  jpa:</span></span><br><span class="line"><span class="attr">    hibernate:</span></span><br><span class="line"><span class="attr">      ddl-auto:</span> <span class="string">update</span></span><br><span class="line"><span class="attr">    show-sql:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  jooq:</span></span><br><span class="line"><span class="attr">    sql-dialect:</span> <span class="string">org.hibernate.dialect.MySQL5InnoDBDialect</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建-表"><a href="#创建-表" class="headerlink" title="创建 表"></a>创建 表</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">`t_user`</span> (</span><br><span class="line">	<span class="string">`id`</span> <span class="built_in">int</span> (<span class="number">20</span>),</span><br><span class="line">	<span class="string">`real_name`</span> <span class="built_in">varchar</span> (<span class="number">96</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="创建dao"><a href="#创建dao" class="headerlink" title="创建dao"></a>创建dao</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>, <span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(Integer id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">User <span class="title">findOne</span><span class="params">(Integer id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function">User <span class="title">save</span><span class="params">(User u)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继承JpaRepository，JpaRepository定义了一些增删改查的方法。<br>根据方法名来自动生成SQL，主要的语法是findXXBy,readAXXBy,queryXXBy,countXXBy, getXXBy后面跟属性名称：<br><code>User findByUserName(String userName);</code><br>也使用一些加一些关键字And、 Or<br><code>User findByUserNameOrEmail(String username, String email);</code>修改、删除、统计也是类似语法</p>
+<p><code>Long deleteById(Long id);
+Long countByUserName(String userName)</code><br>基本上SQL体系中的关键词都可以使用，例如：LIKE、 IgnoreCase、 OrderBy。<br><code>List&lt;User&gt; findByEmailLike(String email);
+User findByUserNameIgnoreCase(String userName);
+List&lt;User&gt; findByUserNameOrderByEmailDesc(String email);</code></p>
+<h3 id="创建controller"><a href="#创建controller" class="headerlink" title="创建controller"></a>创建controller</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JpaController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserDao userDao;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/save/&#123;name&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(@PathVariable String name)</span></span>&#123;</span><br><span class="line">        User u = <span class="keyword">new</span> User();</span><br><span class="line">        u.setReal_name(name);</span><br><span class="line">        userDao.save(u);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/find/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findonne</span><span class="params">(@PathVariable <span class="keyword">int</span> id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userDao.findOne(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动项目"><a href="#启动项目" class="headerlink" title="启动项目"></a>启动项目</h3><p>访问 localhost:8080/save/lisi  查看数据库：<br><img src="/2017/05/21/SpringBoot-jpa/ec3a6ec54aec48ef92646f390024a874.png" alt=""><br>localhost:8080/save/1  查看页面：<br><img src="/2017/05/21/SpringBoot-jpa/2eacf09c6bed4545a13abfb380082c10.png" alt=""></p>
+<p>此时，jpa搭建成功。</p>
+<h2 id="自定义SQL查询"><a href="#自定义SQL查询" class="headerlink" title="自定义SQL查询"></a>自定义SQL查询</h2><p>Spring data 支持大部分的根据名称定义的查询，对于自定义查询，spring data 也是支持的，在方法的上面增加<code>@Query</code>，修改删除，需要增加<code>@Modifying</code>,也可以根据需要增加<code>@Transactional</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Query</span>(<span class="string">"select u from User u where u.real_name = ?1"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">queryByReal_name</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Modifying</span></span><br><span class="line"><span class="meta">@Query</span>(<span class="string">"update User u set u.real_name = ?1 where u.id = ?2"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> User <span class="title">updateById</span><span class="params">(String name, <span class="keyword">int</span> id)</span></span>;</span><br></pre></td></tr></table></figure>
+<h2 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h2><p>编写 带pageable参数的查询，一般放到最后一个参数<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function">Page&lt;User&gt; <span class="title">findAll</span><span class="params">(Pageable pageable)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>编写controller<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@GetMapping</span>(<span class="string">"/findAll"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> Page&lt;User&gt; <span class="title">findAll</span><span class="params">(@RequestParam()</span> <span class="keyword">int</span> page, <span class="keyword">int</span> size)</span>&#123;</span><br><span class="line">	<span class="comment">//排序方式  和字段  可以多個字段排序</span></span><br><span class="line">	Sort sort = <span class="keyword">new</span> Sort(Sort.Direction.DESC, <span class="string">"id"</span>);</span><br><span class="line">	Pageable p = (Pageable) <span class="keyword">new</span> PageRequest(page, size, sort);</span><br><span class="line">	Page&lt;User&gt; all = userDao.findAll(p);</span><br><span class="line">	<span class="keyword">return</span> all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h2><p>和hibernate的hql多表查询差别不大，有两种方式，一种是hibernate的级联查询，一种是将查询结果映射到一个结果类中。</p>
+<p>首先需要定义一个结果集的接口类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HotelSummary</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function">City <span class="title">getCity</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Double <span class="title">getAverageRating</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">default</span> Integer <span class="title">getAverageRatingRounded</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> getAverageRating() == <span class="keyword">null</span> ? <span class="keyword">null</span> : (<span class="keyword">int</span>) Math.round(getAverageRating());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查询的方法返回类型设置为新创建的接口</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Query</span>(<span class="string">"select h.city as city, h.name as name, avg(r.rating) as averageRating "</span></span><br><span class="line">		- <span class="string">"from Hotel h left outer join h.reviews r where h.city = ?1 group by h"</span>)</span><br><span class="line"><span class="function">Page&lt;HotelSummary&gt; <span class="title">findByCity</span><span class="params">(City city, Pageable pageable)</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Query</span>(<span class="string">"select h.name as name, avg(r.rating) as averageRating "</span></span><br><span class="line">		- <span class="string">"from Hotel h left outer join h.reviews r  group by h"</span>)</span><br><span class="line"><span class="function">Page&lt;HotelSummary&gt; <span class="title">findByCity</span><span class="params">(Pageable pageable)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Page&lt;HotelSummary&gt; hotels = <span class="keyword">this</span>.hotelRepository.findByCity(<span class="keyword">new</span> PageRequest(<span class="number">0</span>, <span class="number">10</span>, Direction.ASC, <span class="string">"name"</span>));</span><br><span class="line"><span class="keyword">for</span>(HotelSummary summay:hotels)&#123;</span><br><span class="line">		System.out.println(<span class="string">"Name"</span> +summay.getName());</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>在运行中 spring会将产生一个代理类来接受结果，用getxxx的方式来获取。</p>
+<p>源码地址：<a href="https://github.com/llss6887/springboot/tree/master/springbootjpa" title="**戳这里**" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/jpa/" rel="tag"><i class="fa fa-tag"></i> jpa</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/21/SpringBoot-mybatis/" rel="next" title="SpringBoot 集成mybatis">
+                <i class="fa fa-chevron-left"></i> SpringBoot 集成mybatis
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/22/springboot-datasource/" rel="prev" title="SpringBoot 多数据源">
+                SpringBoot 多数据源 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加依赖"><span class="nav-text">添加依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加jar包"><span class="nav-text">添加jar包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加配置文件"><span class="nav-text">添加配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-表"><span class="nav-text">创建 表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建dao"><span class="nav-text">创建dao</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建controller"><span class="nav-text">创建controller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动项目"><span class="nav-text">启动项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义SQL查询"><span class="nav-text">自定义SQL查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分页查询"><span class="nav-text">分页查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多表查询"><span class="nav-text">多表查询</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

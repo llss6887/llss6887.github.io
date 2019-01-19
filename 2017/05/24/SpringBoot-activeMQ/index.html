@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,ActiveMQ,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JMS是什么JMS的基础JMS是什么：JMS是Java提供的一套技术规范JMS干什么用：用来异构系统 集成通信，缓解系统瓶颈，提高系统的伸缩性增强系统用户体验，使得系统模块化和组件化变得可行并更加灵活通过什么方式：生产消费者模式（生产者、服务器、消费者）jdk，kafka，activemq……">
+<meta name="keywords" content="SpringBoot,ActiveMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot 集成ActiveMQ">
+<meta property="og:url" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="JMS是什么JMS的基础JMS是什么：JMS是Java提供的一套技术规范JMS干什么用：用来异构系统 集成通信，缓解系统瓶颈，提高系统的伸缩性增强系统用户体验，使得系统模块化和组件化变得可行并更加灵活通过什么方式：生产消费者模式（生产者、服务器、消费者）jdk，kafka，activemq……">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/1252cf72e1b24603988b216d0ac26b92.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/beb8bbca2d284051931657cad03935a3.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/1408d3c96baf4c16ae7936654bb1195a.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/82d025b6ebc045f29fe366e488ef6123.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/d4884748ecfc4e99a1db81ceb47ca160.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/f52ee2d994be4c7fa17a574876cc3d49.jpg">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/9f8ce850752742b5a62d9dd4d2efb361.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/69742e33fb1d4bb18e40c8df24f50cf9.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.280Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot 集成ActiveMQ">
+<meta name="twitter:description" content="JMS是什么JMS的基础JMS是什么：JMS是Java提供的一套技术规范JMS干什么用：用来异构系统 集成通信，缓解系统瓶颈，提高系统的伸缩性增强系统用户体验，使得系统模块化和组件化变得可行并更加灵活通过什么方式：生产消费者模式（生产者、服务器、消费者）jdk，kafka，activemq……">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/1252cf72e1b24603988b216d0ac26b92.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/">
+
+
+
+
+
+  <title>SpringBoot 集成ActiveMQ | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/05/24/SpringBoot-activeMQ/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SpringBoot 集成ActiveMQ</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-24T20:36:47+08:00">
+                2017-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ActiveMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">ActiveMQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JMS是什么"><a href="#JMS是什么" class="headerlink" title="JMS是什么"></a>JMS是什么</h2><h3 id="JMS的基础"><a href="#JMS的基础" class="headerlink" title="JMS的基础"></a>JMS的基础</h3><p>JMS是什么：JMS是Java提供的一套技术规范<br>JMS干什么用：用来异构系统 集成通信，缓解系统瓶颈，提高系统的伸缩性增强系统用户体验，使得系统模块化和组件化变得可行并更加灵活<br>通过什么方式：生产消费者模式（生产者、服务器、消费者）<br><img src="/2017/05/24/SpringBoot-activeMQ/1252cf72e1b24603988b216d0ac26b92.png" alt=""><br>jdk，kafka，activemq……</p>
+<a id="more"></a>
+<h2 id="JMS消息传输模型"><a href="#JMS消息传输模型" class="headerlink" title="JMS消息传输模型"></a>JMS消息传输模型</h2><p>点对点模式（一对一，消费者主动拉取数据，消息收到后消息清除）<br>点对点模型通常是一个基于拉取或者轮询的消息传送模型，这种模型从队列中请求信息，而不是将消息推送到客户端。这个模型的特点是发送到队列的消息被一个且只有一个接收者接收处理，即使有多个消息监听者也是如此。</p>
+<p>发布/订阅模式（一对多，数据生产后，推送给所有订阅者）<br>发布订阅模型则是一个基于推送的消息传送模型。发布订阅模型可以有多种不同的订阅者，临时订阅者只在主动监听主题时才接收消息，而持久订阅者则监听主题的所有消息，即时当前订阅者不可用，处于离线状态。</p>
+<p><img src="/2017/05/24/SpringBoot-activeMQ/beb8bbca2d284051931657cad03935a3.png" alt=""><br>queue.put（object）  数据生产<br>queue.take(object)    数据消费</p>
+<h2 id="JMS核心组件"><a href="#JMS核心组件" class="headerlink" title="JMS核心组件"></a>JMS核心组件</h2><p>Destination：消息发送的目的地，也就是前面说的Queue和Topic。<br>Message ：从字面上就可以看出是被发送的消息。<br>Producer： 消息的生产者，要发送一个消息，必须通过这个生产者来发送。<br>MessageConsumer： 与生产者相对应，这是消息的消费者或接收者，通过它来接收一个消息。<br><img src="/2017/05/24/SpringBoot-activeMQ/1408d3c96baf4c16ae7936654bb1195a.png" alt=""></p>
+<p>通过与ConnectionFactory可以获得一个connection<br>通过connection可以获得一个session会话。</p>
+<h2 id="常见的类JMS消息服务器"><a href="#常见的类JMS消息服务器" class="headerlink" title="常见的类JMS消息服务器"></a>常见的类JMS消息服务器</h2><p>JMS消息服务器 ActiveMQ<br>分布式消息中间件 Metamorphosis<br>分布式消息中间件 RocketMQ</p>
+<h2 id="其他MQ"><a href="#其他MQ" class="headerlink" title="其他MQ"></a>其他MQ</h2><p>.NET消息中间件 DotNetMQ<br>基于HBase的消息队列 HQueue<br>Go 的 MQ 框架 KiteQ<br>AMQP消息服务器 RabbitMQ<br>MemcacheQ 是一个基于 MemcacheDB 的消息队列服务器。</p>
+<h2 id="为什么需要消息队列"><a href="#为什么需要消息队列" class="headerlink" title="为什么需要消息队列"></a>为什么需要消息队列</h2><p>消息系统的核心作用就是三点：解耦，异步和并行<br>以用户注册的案列来说明消息系统的作用</p>
+<h3 id="用户注册的一般流程"><a href="#用户注册的一般流程" class="headerlink" title="用户注册的一般流程"></a>用户注册的一般流程</h3><p><img src="/2017/05/24/SpringBoot-activeMQ/82d025b6ebc045f29fe366e488ef6123.jpg" alt=""><br>问题：随着后端流程越来越多，每步流程都需要额外的耗费很多时间，从而会导致用户更长的等待延迟</p>
+<h3 id="用户注册的并行执行"><a href="#用户注册的并行执行" class="headerlink" title="用户注册的并行执行"></a>用户注册的并行执行</h3><p><img src="/2017/05/24/SpringBoot-activeMQ/d4884748ecfc4e99a1db81ceb47ca160.jpg" alt=""><br>问题：系统并行的发起了4个请求，4个请求中，如果某一个环节执行1分钟，其他环节再快，用户也需要等待1分钟。如果其中一个环节异常之后，整个服务挂掉了。</p>
+<h3 id="用户注册的最终一致"><a href="#用户注册的最终一致" class="headerlink" title="用户注册的最终一致"></a>用户注册的最终一致</h3><p><img src="/2017/05/24/SpringBoot-activeMQ/f52ee2d994be4c7fa17a574876cc3d49.jpg" alt=""><br>保证主流程的正常执行、执行成功之后，发送MQ消息出去。<br>需要这个destination的其他系统通过消费数据再执行，最终一致。<img src="/2017/05/24/SpringBoot-activeMQ/9f8ce850752742b5a62d9dd4d2efb361.png" alt=""></p>
+<h2 id="ActiveMQ的安装"><a href="#ActiveMQ的安装" class="headerlink" title="ActiveMQ的安装"></a>ActiveMQ的安装</h2><p>1.下载ActiveMQ<br>去官方网站下载：<a href="http://activemq.apache.org/" title="http://activemq.apache.org/" target="_blank" rel="noopener">http://activemq.apache.org/</a></p>
+<p>2.运行ActiveMQ<br>解压缩apache-activemq-5.5.1-bin.zip，<br>修改配置文件activeMQ.xml，将0.0.0.0修改为localhost<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">transportConnectors</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">transportConnector</span> <span class="attr">name</span>=<span class="string">"openwire"</span> <span class="attr">uri</span>=<span class="string">"tcp://localhost:61616"</span>&gt;</span><span class="tag">&lt;/<span class="name">transportConnector</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">transportConnector</span> <span class="attr">name</span>=<span class="string">"ssl"</span>     <span class="attr">uri</span>=<span class="string">"ssl://localhost:61617"</span>&gt;</span><span class="tag">&lt;/<span class="name">transportConnector</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">transportConnector</span> <span class="attr">name</span>=<span class="string">"stomp"</span>   <span class="attr">uri</span>=<span class="string">"stomp://localhost:61613"</span>&gt;</span><span class="tag">&lt;/<span class="name">transportConnector</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">transportConnector</span> <span class="attr">uri</span>=<span class="string">"http://localhost:8081"</span>&gt;</span><span class="tag">&lt;/<span class="name">transportConnector</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">transportConnector</span> <span class="attr">uri</span>=<span class="string">"udp://localhost:61618"</span>&gt;</span><span class="tag">&lt;/<span class="name">transportConnector</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">transportConnectors</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>然后双击apache-activemq-5.5.1\bin\activemq.bat运行ActiveMQ程序。<br>启动ActiveMQ以后，登陆：<a href="http://localhost:8161/admin/。" target="_blank" rel="noopener">http://localhost:8161/admin/。</a><br><img src="/2017/05/24/SpringBoot-activeMQ/69742e33fb1d4bb18e40c8df24f50cf9.png" alt=""></p>
+<h2 id="和Spring-Boot-集成"><a href="#和Spring-Boot-集成" class="headerlink" title="和Spring Boot 集成"></a>和Spring Boot 集成</h2><h3 id="pom文件"><a href="#pom文件" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.3.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.reporting.outputEncoding</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">java.version</span>&gt;</span>1.7<span class="tag">&lt;/<span class="name">java.version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- springboot整合activemq --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-activemq<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>添加：spring-boot-starter-activemq依赖</p>
+<h3 id="produce生产者编写"><a href="#produce生产者编写" class="headerlink" title="produce生产者编写"></a>produce生产者编写</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span>(<span class="string">"registerMailboxProducer"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActiveMQProducer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> JmsMessagingTemplate jmsMessagingTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">(Destination destination, String json)</span></span>&#123;</span><br><span class="line">        jmsMessagingTemplate.convertAndSend(destination, json);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="cusumer消费者编写"><a href="#cusumer消费者编写" class="headerlink" title="cusumer消费者编写"></a>cusumer消费者编写</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActiveMQConsumer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ActiveMQProducer activeMQProducer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JmsListener</span>(destination = <span class="string">"my_queue"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">distribute</span><span class="params">(String json)</span></span>&#123;</span><br><span class="line">        System.out.println(json);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="yml文件"><a href="#yml文件" class="headerlink" title="yml文件"></a>yml文件</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  activemq:</span></span><br><span class="line"><span class="attr">    in-memory:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    broker-url:</span> <span class="attr">tcp://localhost:61616</span></span><br><span class="line"><span class="attr">    pool:</span></span><br><span class="line"><span class="attr">      enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">messages:</span></span><br><span class="line"><span class="attr">  queue:</span> <span class="string">my_queue</span></span><br></pre></td></tr></table></figure>
+<h3 id="测试编写"><a href="#测试编写" class="headerlink" title="测试编写"></a>测试编写</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActiveMqServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;messages.queue&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String queue;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ActiveMQProducer activeMQProducer;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ActiveMqServer.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/msg/&#123;str&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set_queue</span><span class="params">(@PathVariable String str)</span></span>&#123;</span><br><span class="line">        Destination amq = <span class="keyword">new</span> ActiveMQQueue(queue);</span><br><span class="line">        activeMQProducer.send(amq, str);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h2><p>访问localhost:8080/msg/hello-activeMQ,查看控制台打印。 Spring Boot 和ActiveMQ的集成就完成了。如果需要topic，只需要更换下，创建的API就可以了。用ActiveMQTopic。</p>
+<p>源码地址： <a href="https://github.com/llss6887/springboot/tree/master/springbootactiveMq" target="_blank" rel="noopener"><strong>戳这里</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/ActiveMQ/" rel="tag"><i class="fa fa-tag"></i> ActiveMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/22/springboot-datasource/" rel="next" title="SpringBoot 多数据源">
+                <i class="fa fa-chevron-left"></i> SpringBoot 多数据源
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/24/activeMQ-ha/" rel="prev" title="ActiveMQ 的高可用">
+                ActiveMQ 的高可用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS是什么"><span class="nav-text">JMS是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMS的基础"><span class="nav-text">JMS的基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS消息传输模型"><span class="nav-text">JMS消息传输模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS核心组件"><span class="nav-text">JMS核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的类JMS消息服务器"><span class="nav-text">常见的类JMS消息服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他MQ"><span class="nav-text">其他MQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要消息队列"><span class="nav-text">为什么需要消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户注册的一般流程"><span class="nav-text">用户注册的一般流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户注册的并行执行"><span class="nav-text">用户注册的并行执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户注册的最终一致"><span class="nav-text">用户注册的最终一致</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ActiveMQ的安装"><span class="nav-text">ActiveMQ的安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和Spring-Boot-集成"><span class="nav-text">和Spring Boot 集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pom文件"><span class="nav-text">pom文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#produce生产者编写"><span class="nav-text">produce生产者编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cusumer消费者编写"><span class="nav-text">cusumer消费者编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yml文件"><span class="nav-text">yml文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试编写"><span class="nav-text">测试编写</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动服务"><span class="nav-text">启动服务</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

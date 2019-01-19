@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="cache,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="起因假设先写数据库，再淘汰缓存：第一步写数据库操作成功，第二步淘汰缓存失败，则会出现DB中是新数据，Cache中是旧数据，数据不一致【如下图：db中是新数据，cache中是旧数据】。假设先淘汰缓存，再写数据库：第一步淘汰缓存成功，第二步写数据库失败【如下图：cache中无数据，db中是旧数据】。结论：先淘汰缓存，再写数据库。">
+<meta name="keywords" content="cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cache和db不一致的问题">
+<meta property="og:url" content="https://llss6887.github.io/2017/07/25/cache-db/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="起因假设先写数据库，再淘汰缓存：第一步写数据库操作成功，第二步淘汰缓存失败，则会出现DB中是新数据，Cache中是旧数据，数据不一致【如下图：db中是新数据，cache中是旧数据】。假设先淘汰缓存，再写数据库：第一步淘汰缓存成功，第二步写数据库失败【如下图：cache中无数据，db中是旧数据】。结论：先淘汰缓存，再写数据库。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/07/25/cache-db/1.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/07/25/cache-db/2.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/07/25/cache-db/3.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/07/25/cache-db/4.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/07/25/cache-db/5.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.312Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cache和db不一致的问题">
+<meta name="twitter:description" content="起因假设先写数据库，再淘汰缓存：第一步写数据库操作成功，第二步淘汰缓存失败，则会出现DB中是新数据，Cache中是旧数据，数据不一致【如下图：db中是新数据，cache中是旧数据】。假设先淘汰缓存，再写数据库：第一步淘汰缓存成功，第二步写数据库失败【如下图：cache中无数据，db中是旧数据】。结论：先淘汰缓存，再写数据库。">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/07/25/cache-db/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/07/25/cache-db/">
+
+
+
+
+
+  <title>cache和db不一致的问题 | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/07/25/cache-db/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">cache和db不一致的问题</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T20:36:47+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.8k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>假设先写数据库，再淘汰缓存：第一步写数据库操作成功，第二步淘汰缓存失败，则会出现DB中是新数据，Cache中是旧数据，数据不一致【如下图：db中是新数据，cache中是旧数据】。<br><img src="/2017/07/25/cache-db/1.png" alt=""><br>假设先淘汰缓存，再写数据库：第一步淘汰缓存成功，第二步写数据库失败【如下图：cache中无数据，db中是旧数据】。<br><img src="/2017/07/25/cache-db/2.png" alt=""><br>结论：先淘汰缓存，再写数据库。<br><a id="more"></a></p>
+<h2 id="数据不一致原因"><a href="#数据不一致原因" class="headerlink" title="数据不一致原因"></a>数据不一致原因</h2><p>先操作缓存，在写数据库成功之前，如果有读请求发生，可能导致旧数据入缓存，引发数据不一致。</p>
+<p>写流程：<br>(1) 先淘汰cache<br>(2) 再写db</p>
+<p>读流程：<br>(1) 先读cache，如果数据命中hit则返回<br>(2) 如果数据未命中miss则读db<br>(3) 将db中读取出来的数据入缓存</p>
+<p>什么情况下可能出现缓存和数据库中数据不一致呢？<br><img src="/2017/07/25/cache-db/3.png" alt=""></p>
+<p>在分布式环境下，数据的读写都是并发的，上游有多个应用，通过一个服务的多个部署（为了保证可用性，一定是部署多份的），对同一个数据进行读写，在数据库层面并发的读写并不能保证完成顺序，也就是说后发出的读请求很可能先完成（读出脏数据）：</p>
+<p>(a) 发生了写请求A，A的第一步淘汰了cache（如上图中的1）<br>(b) A的第二步写数据库，发出修改请求（如上图中的2）<br>(c) 发生了读请求B，B的第一步读取cache，发现cache中是空的（如上图中的步骤3）<br>(d) B的第二步读取数据库，发出读取请求，此时A的第二步写数据还没完成，读出了一个脏数据放入cache（如上图中的步骤4）</p>
+<p>即在数据库层面，后发出的请求4比先发出的请求2先完成了，读出了脏数据，脏数据又入了缓存，缓存与数据库中的数据不一致出现了</p>
+<h2 id="问题解决思路"><a href="#问题解决思路" class="headerlink" title="问题解决思路"></a>问题解决思路</h2><p>能否做到先发出的请求一定先执行完成呢？常见的思路是“串行化”<br><img src="/2017/07/25/cache-db/4.png" alt=""></p>
+<p>上图是一个service服务的上下游及服务内部详细展开，细节如下：<br>(1) service的上游是多个业务应用，上游发起请求对同一个数据并发的进行读写操作，上例中并发进行了一个uid=1的余额修改（写）操作与uid=1的余额查询（读）操作<br>(2) service的下游是数据库DB，假设只读写一个DB<br>(3) 中间是服务层service，它又分为了这么几个部分<br>（3.1）最上层是任务队列<br>（3.2）中间是工作线程，每个工作线程完成实际的工作任务，典型的工作任务是通过数据库连接池读写数据库<br>（3.3）最下层是数据库连接池，所有的SQL语句都是通过数据库连接池发往数据库去执行的</p>
+<p>工作线程的典型工作流是这样的：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work_thread_routine</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Task t = TaskQueue.pop(); <span class="comment">// 获取任务</span></span><br><span class="line">	<span class="comment">// 任务逻辑处理，生成sql语句</span></span><br><span class="line">	DBConnection c = CPool.GetDBConnection(); <span class="comment">// 从DB连接池获取一个DB连接</span></span><br><span class="line">	c.execSQL(sql); <span class="comment">// 通过DB连接执行sql语句</span></span><br><span class="line">	CPool.PutDBConnection(c); <span class="comment">// 将DB连接放回DB连接池</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="如何串行化"><a href="#如何串行化" class="headerlink" title="如何串行化"></a>如何串行化</h3><p>1）任务队列不能保证串行化<br>2）单服务多数据库连接不能保证串行化<br>3）多服务单数据库连接不能保证串行化<br>4）单服务单数据库连接可能保证串行化，但吞吐量级低，且不能保证服务的可用性，几乎不可行</p>
+<p>其实不需要让全局的请求串行化，而只需要“让同一个数据的访问能串行化”就行。<br>在一个服务内，如何做到“让同一个数据的访问串行化”，只需要“让同一个数据的访问通过同一条DB连接执行”就行。<br>如何做到“让同一个数据的访问通过同一条DB连接执行”，只需要“在DB连接池层面稍微修改，按数据取连接即可”<br>获取DB连接的CPool.GetDBConnection()【返回任何一个可用DB连接】改为<br>CPool.GetDBConnection(longid)【返回id取模相关联的DB连接】</p>
+<p>这个修改的好处是：<br>（1）简单，只需要修改DB连接池实现，以及DB连接获取处<br>（2）连接池的修改不需要关注业务，传入的id是什么含义连接池不关注，直接按照id取模返回DB连接即可<br>（3）可以适用多种业务场景，取用户数据业务传入user-id取连接，取订单数据业务传入order-id取连接即可<br>这样的话，就能够保证同一个数据例如uid在数据库层面的执行一定是串行的</p>
+<p>服务可是部署了很多份的，上述方案只能保证同一个数据在一个服务上的访问，在DB层面的执行是串行化的，实际上服务是分布式部署的，在全局范围内的访问仍是并行的，怎么解决呢？能不能做到同一个数据的访问一定落到同一个服务呢？</p>
+<h3 id="能否做到同一个数据的访问落在同一个服务上？"><a href="#能否做到同一个数据的访问落在同一个服务上？" class="headerlink" title="能否做到同一个数据的访问落在同一个服务上？"></a>能否做到同一个数据的访问落在同一个服务上？</h3><p><img src="/2017/07/25/cache-db/5.png" alt=""></p>
+<p>（1）业务应用的上游不确定是啥，可能是直接是http请求，可能也是一个服务的上游调用<br>（2）业务应用的下游是多个服务service<br>（3）中间是业务应用，它又分为了这么几个部分<br>（3.1）最上层是任务队列【或许web-server例如tomcat帮你干了这个事情了】<br>（3.2）中间是工作线程【或许web-server的工作线程或者cgi工作线程帮你干了线程分派这个事情了】，每个工作线程完成实际的业务任务，典型的工作任务是通过服务连接池进行RPC调用<br>（3.3）最下层是服务连接池，所有的RPC调用都是通过服务连接池往下游服务去发包执行的</p>
+<p>工作线程的典型工作流是这样的：<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">work_thread_routine</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Task t = TaskQueue.pop(); <span class="comment">// 获取任务</span></span><br><span class="line">	<span class="comment">// 任务逻辑处理，组成一个网络包packet，调用下游RPC接口</span></span><br><span class="line">	ServiceConnection c = CPool.GetServiceConnection(); <span class="comment">// 从Service连接池获取一个Service连接</span></span><br><span class="line">	c.Send(packet); <span class="comment">// 通过Service连接发送报文执行RPC请求</span></span><br><span class="line">	CPool.PutServiceConnection(c); <span class="comment">// 将Service连接放回Service连接池</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于数据库层面的读写并发，引发的数据库与缓存数据不一致的问题（本质是后发生的读请求先返回了），可能通过两个小的改动解决：<br>（1）修改服务Service连接池，id取模选取服务连接，能够保证同一个数据的读写都落在同一个后端服务上<br>（2）修改数据库DB连接池，id取模选取DB连接，能够保证同一个数据的读写在数据库层面是串行的</p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/cache/" rel="tag"><i class="fa fa-tag"></i> cache</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/24/springboot-shiro/" rel="next" title="SpringBoot 集成shiro">
+                <i class="fa fa-chevron-left"></i> SpringBoot 集成shiro
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/29/astructure/" rel="prev" title="分布式事务的一致性">
+                分布式事务的一致性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据不一致原因"><span class="nav-text">数据不一致原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决思路"><span class="nav-text">问题解决思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何串行化"><span class="nav-text">如何串行化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#能否做到同一个数据的访问落在同一个服务上？"><span class="nav-text">能否做到同一个数据的访问落在同一个服务上？</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

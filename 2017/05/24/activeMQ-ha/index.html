@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,ActiveMQ,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是高可用高可用就是将各个系统通过网络或者其他手段组成一个群体，共同对外提供服务，消除单点故障，比如solr利用zookeeper进行主从节点的选举，选取leader对外提供服务。内部各节点进行通讯，当leader挂掉之后，会重新选取一个新的leader，并对外提供服务，当挂掉的leader恢复之后，自动加入到集群里面，保证整个服务能一直对外提供服务。 什么是负载均衡将请求分摊到对个操作单元中进">
+<meta name="keywords" content="SpringBoot,ActiveMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ActiveMQ 的高可用">
+<meta property="og:url" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="什么是高可用高可用就是将各个系统通过网络或者其他手段组成一个群体，共同对外提供服务，消除单点故障，比如solr利用zookeeper进行主从节点的选举，选取leader对外提供服务。内部各节点进行通讯，当leader挂掉之后，会重新选取一个新的leader，并对外提供服务，当挂掉的leader恢复之后，自动加入到集群里面，保证整个服务能一直对外提供服务。 什么是负载均衡将请求分摊到对个操作单元中进">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/f242aa6ba66246ca989f70cc157ab31e.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/a3390bbeb59e470f821eb0c7298f5dde.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/1af1bf4b7e4f4045a16ac96b21b54964.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/f8a7be6245af41889a422ef04fdb8981.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/94c2bebbfecb4ede962cb3093e6a1fc1.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/23096f4a1ebc45cd8c14039fa014cd7f.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/fa8b725997fa4a029ff9da43a42f1c9d.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/9fb9803776c8422b9aa9a6e4cd381df0.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.276Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ActiveMQ 的高可用">
+<meta name="twitter:description" content="什么是高可用高可用就是将各个系统通过网络或者其他手段组成一个群体，共同对外提供服务，消除单点故障，比如solr利用zookeeper进行主从节点的选举，选取leader对外提供服务。内部各节点进行通讯，当leader挂掉之后，会重新选取一个新的leader，并对外提供服务，当挂掉的leader恢复之后，自动加入到集群里面，保证整个服务能一直对外提供服务。 什么是负载均衡将请求分摊到对个操作单元中进">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/05/24/activeMQ-ha/f242aa6ba66246ca989f70cc157ab31e.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/05/24/activeMQ-ha/">
+
+
+
+
+
+  <title>ActiveMQ 的高可用 | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/05/24/activeMQ-ha/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ActiveMQ 的高可用</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-24T20:36:47+08:00">
+                2017-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/ActiveMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">ActiveMQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是高可用"><a href="#什么是高可用" class="headerlink" title="什么是高可用"></a>什么是高可用</h2><p>高可用就是将各个系统通过网络或者其他手段组成一个群体，共同对外提供服务，消除单点故障，比如solr利用zookeeper进行主从节点的选举，选取leader对外提供服务。内部各节点进行通讯，当leader挂掉之后，会重新选取一个新的leader，并对外提供服务，当挂掉的leader恢复之后，自动加入到集群里面，保证整个服务能一直对外提供服务。</p>
+<h2 id="什么是负载均衡"><a href="#什么是负载均衡" class="headerlink" title="什么是负载均衡"></a>什么是负载均衡</h2><p>将请求分摊到对个操作单元中进行执行，共同完成工作任务。比如nginx+tomcat的负载均衡，当访问量大时，将这些请求按照一定的规则分别分发的内部的tomcat服务，而不是单一的tomcat来响应这些请求。nginx的负载方式：<br><a id="more"></a><br>rr:  按照时间顺序<br>ip_hash: 按照访问用户的ip的hash值<br>fair: 按照响应时间，时间短的优先<br>url_hash: 根据请求的url固定到同一个服务</p>
+<h2 id="ActiveMQ的高可用"><a href="#ActiveMQ的高可用" class="headerlink" title="ActiveMQ的高可用"></a>ActiveMQ的高可用</h2><h3 id="ShareNothing-Master-Slave"><a href="#ShareNothing-Master-Slave" class="headerlink" title="ShareNothing  Master/Slave"></a>ShareNothing  Master/Slave</h3><p>master和slave不共享存储<br>master接收到持久化消息后，会同步给slave<br>master出现故障，slave自己成为master或者关闭服务<br>如果master和slave之间通信故障，salve会认为master宕机，如果配置为自己成为master会出现脑裂<br>非持久的消息不会同步<br>slave只能同步连接后的消息，之前的无法同步，宕机之后的数据也不会自动同步，有丢失消息的风险<br><img src="/2017/05/24/activeMQ-ha/f242aa6ba66246ca989f70cc157ab31e.png" alt=""></p>
+<h3 id="Shared-Database-Master-Slave"><a href="#Shared-Database-Master-Slave" class="headerlink" title="Shared Database Master/Slave"></a>Shared Database Master/Slave</h3><p>master和slave共享一份数据。<br>master和slave只有一个有写的权限。<br>master和slave之间不需要做数据同步。<br>master和slave通过竞争锁来竞争master。<br><img src="/2017/05/24/activeMQ-ha/a3390bbeb59e470f821eb0c7298f5dde.png" alt=""><br>在高可用环境中，用的最多的就是利用zookeeper来协调，zookeeper本身是高可用的架构，主备之间自动同步。zookeeper还提供全局的锁，多个服务在启动的时候在zookeeper创建一个带编号的临时文件，序号小的为master，并设置监听，当master和zookeeper断开时，zookeeper会删除掉master的临时文件，并通知其他服务，序号小的为master，当master重新连接，会重新向zookeeper注册。</p>
+<h2 id="搭建高可用环境"><a href="#搭建高可用环境" class="headerlink" title="搭建高可用环境"></a>搭建高可用环境</h2><h3 id="端口分配"><a href="#端口分配" class="headerlink" title="端口分配"></a>端口分配</h3><table>
+<thead>
+<tr>
+<th>服务名称</th>
+<th>web端口</th>
+<th>消息服务端口</th>
+<th>通信端口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mq01</td>
+<td>8161</td>
+<td>60001</td>
+<td>61600</td>
+</tr>
+<tr>
+<td>mq02</td>
+<td>8162</td>
+<td>60002</td>
+<td>61600</td>
+</tr>
+<tr>
+<td>mq03</td>
+<td>8163</td>
+<td>60003</td>
+<td>61600</td>
+</tr>
+</tbody>
+</table>
+<p>注： web端口在jetty.xml文件中配置</p>
+<h3 id="配置XML"><a href="#配置XML" class="headerlink" title="配置XML"></a>配置XML</h3><p>1、配置broker<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">broker</span> <span class="attr">xmlns</span>=<span class="string">"http://activemq.apache.org/schema/core"</span> <span class="attr">brokerName</span>=<span class="string">"mqStore"</span> <span class="attr">dataDirectory</span>=<span class="string">"$&#123;activemq.data&#125;"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>brokerName一致的服务会加入到同一个集群中。<br>2、配置共享的db<br><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">persistenceAdapter</span>&gt;</span></span><br><span class="line">	<span class="comment">&lt;!--&lt;kahaDB directory="$&#123;activemq.data&#125;/kahadb"/&gt;--&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">replicatedLevelDB</span></span></span><br><span class="line"><span class="tag">		<span class="attr">directory</span>=<span class="string">"$&#123;activemq.data&#125;/storedb"</span></span></span><br><span class="line">		replicas="3"  &lt;!-- 副本数量 --&gt;</span><br><span class="line">		bind="tcp://127.0.0.1:61600"  <span class="comment">&lt;!-- 通信端口 --&gt;</span></span><br><span class="line">		zkAddress="182.61.34.13:2181" <span class="comment">&lt;!-- zk地址，多个逗号分隔 --&gt;</span> </span><br><span class="line">		hostname="mq01"     <span class="comment">&lt;!-- 对应各自的hostname --&gt;</span></span><br><span class="line">		zkPath="/activemq/mqstores"  <span class="comment">&lt;!-- 关于ActiveMQ的zk目录 --&gt;</span></span><br><span class="line">	/&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">persistenceAdapter</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="启动每一个activeMQ"><a href="#启动每一个activeMQ" class="headerlink" title="启动每一个activeMQ"></a>启动每一个activeMQ</h3><p>activemq start </p>
+<h3 id="查看zookeeper中的文件"><a href="#查看zookeeper中的文件" class="headerlink" title="查看zookeeper中的文件"></a>查看zookeeper中的文件</h3><p>./zkCli.sh     get /activemq/mqstores<br><img src="/2017/05/24/activeMQ-ha/1af1bf4b7e4f4045a16ac96b21b54964.png" alt=""><br>出现上图，表示三台启动成功。numChildren = 3，表示有三台已经启动，并向zookeeper注册。<br>关掉一台ActiveMQ，显示只有两台启动。<br><img src="/2017/05/24/activeMQ-ha/f8a7be6245af41889a422ef04fdb8981.png" alt=""></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="YML文件"><a href="#YML文件" class="headerlink" title="YML文件"></a>YML文件</h4><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8080</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  activemq:</span></span><br><span class="line"><span class="attr">    in-memory:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">    broker-url:</span> <span class="attr">failover:(tcp://localhost:60001,tcp://localhost:60002,tcp://localhost:60002)</span></span><br><span class="line"><span class="attr">    pool:</span></span><br><span class="line"><span class="attr">      enabled:</span> <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="attr">messages:</span></span><br><span class="line"><span class="attr">  queue:</span> <span class="string">my_queue</span></span><br></pre></td></tr></table></figure>
+<h4 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span>(<span class="string">"registerMailboxProducer"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActiveMQProducer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> JmsMessagingTemplate jmsMessagingTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">(Destination destination, String json)</span></span>&#123;</span><br><span class="line">        jmsMessagingTemplate.convertAndSend(destination, json);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="消费者"><a href="#消费者" class="headerlink" title="消费者"></a>消费者</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActiveMQConsumer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ActiveMQProducer activeMQProducer;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@JmsListener</span>(destination = <span class="string">"my_queue"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">distribute</span><span class="params">(String json)</span></span>&#123;</span><br><span class="line">        System.out.println(json);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/05/24/activeMQ-ha/94c2bebbfecb4ede962cb3093e6a1fc1.png" alt=""></p>
+<h4 id="发送数据"><a href="#发送数据" class="headerlink" title="发送数据"></a>发送数据</h4><p><img src="/2017/05/24/activeMQ-ha/23096f4a1ebc45cd8c14039fa014cd7f.png" alt=""><br>当前连接的是60002的activeMQ服务。现在关闭60002。<br><img src="/2017/05/24/activeMQ-ha/fa8b725997fa4a029ff9da43a42f1c9d.png" alt=""><br>重新选举出了60001为master，服务依然可用，现在关闭60001。<br><img src="/2017/05/24/activeMQ-ha/9fb9803776c8422b9aa9a6e4cd381df0.png" alt=""><br>60001关闭后，集群中只有一个节点，整个服务都不可用了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在一般公司中，做到高可用，基本就已经可以了，ActiveMQ占资源，如果有特别大的数据需求，Kafka,RocketMQ都适合大数据的场景，天然的集群分布式优势，实际中根据自己的需求来选择适合自己的队列。</p>
+<p>源码地址：<a href="https://github.com/llss6887/springboot/tree/master/springbootactiveMQ-HA" title=" **戳这里**" target="_blank" rel="noopener"> <strong>戳这里</strong></a></p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/ActiveMQ/" rel="tag"><i class="fa fa-tag"></i> ActiveMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/24/SpringBoot-activeMQ/" rel="next" title="SpringBoot 集成ActiveMQ">
+                <i class="fa fa-chevron-left"></i> SpringBoot 集成ActiveMQ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/25/SpringBoot-dubbo/" rel="prev" title="SpringBoot 集成Dubbo">
+                SpringBoot 集成Dubbo <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是高可用"><span class="nav-text">什么是高可用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是负载均衡"><span class="nav-text">什么是负载均衡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ActiveMQ的高可用"><span class="nav-text">ActiveMQ的高可用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ShareNothing-Master-Slave"><span class="nav-text">ShareNothing  Master/Slave</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shared-Database-Master-Slave"><span class="nav-text">Shared Database Master/Slave</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建高可用环境"><span class="nav-text">搭建高可用环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#端口分配"><span class="nav-text">端口分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置XML"><span class="nav-text">配置XML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动每一个activeMQ"><span class="nav-text">启动每一个activeMQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看zookeeper中的文件"><span class="nav-text">查看zookeeper中的文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#YML文件"><span class="nav-text">YML文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生产者"><span class="nav-text">生产者</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消费者"><span class="nav-text">消费者</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发送数据"><span class="nav-text">发送数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

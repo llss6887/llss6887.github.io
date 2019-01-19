@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="SpringBoot,RocketMQ,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Rocket的安装下载官方地址：http://rocketmq.apache.org/dowloading/releases/ 部署Rocket将下载的二进制包解压打开 runbroker.cmd和runserver.cmd 修改运行参数">
+<meta name="keywords" content="SpringBoot,RocketMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot集成RocketMQ">
+<meta property="og:url" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/index.html">
+<meta property="og:site_name" content="li.ss&#39; nodes">
+<meta property="og:description" content="Rocket的安装下载官方地址：http://rocketmq.apache.org/dowloading/releases/ 部署Rocket将下载的二进制包解压打开 runbroker.cmd和runserver.cmd 修改运行参数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/1.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/2.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/3.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/4.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/5.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/6.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/7.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/8.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/9.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/10.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/11.png">
+<meta property="og:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/12.png">
+<meta property="og:updated_time" content="2019-01-19T13:21:23.308Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot集成RocketMQ">
+<meta name="twitter:description" content="Rocket的安装下载官方地址：http://rocketmq.apache.org/dowloading/releases/ 部署Rocket将下载的二进制包解压打开 runbroker.cmd和runserver.cmd 修改运行参数">
+<meta name="twitter:image" content="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/">
+
+
+
+
+
+  <title>SpringBoot集成RocketMQ | li.ss' nodes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">li.ss' nodes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">Every day is a brand new last day.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://llss6887.github.io/2017/06/18/SpringBoot_RocketMQ/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="li.sscoder">
+      <meta itemprop="description" content="Love life, Love technology.">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="li.ss' nodes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SpringBoot集成RocketMQ</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T23:59:47+08:00">
+                2017-06-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/RocketMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">RocketMQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Rocket的安装"><a href="#Rocket的安装" class="headerlink" title="Rocket的安装"></a>Rocket的安装</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>官方地址：<a href="http://rocketmq.apache.org/dowloading/releases/" target="_blank" rel="noopener">http://rocketmq.apache.org/dowloading/releases/</a></p>
+<h3 id="部署Rocket"><a href="#部署Rocket" class="headerlink" title="部署Rocket"></a>部署Rocket</h3><p>将下载的二进制包解压<br><img src="/2017/06/18/SpringBoot_RocketMQ/1.png" alt=""><br>打开 runbroker.cmd和runserver.cmd 修改运行参数<br><a id="more"></a><br><img src="/2017/06/18/SpringBoot_RocketMQ/2.png" alt=""><br>更改参数主要是防止内存过大导致的内存不足等问题，你要是，内存够大，请忽略。<br><img src="/2017/06/18/SpringBoot_RocketMQ/3.png" alt=""><br><img src="/2017/06/18/SpringBoot_RocketMQ/4.png" alt=""></p>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><h4 id="启动namesrv"><a href="#启动namesrv" class="headerlink" title="启动namesrv"></a>启动namesrv</h4><p><img src="/2017/06/18/SpringBoot_RocketMQ/5.png" alt=""></p>
+<h4 id="启动broker"><a href="#启动broker" class="headerlink" title="启动broker"></a>启动broker</h4><p><img src="/2017/06/18/SpringBoot_RocketMQ/6.png" alt=""></p>
+<p>出现以上 说明启动完成。</p>
+<h2 id="与SpringBoot的集成（原始的API）"><a href="#与SpringBoot的集成（原始的API）" class="headerlink" title="与SpringBoot的集成（原始的API）"></a>与SpringBoot的集成（原始的API）</h2><p>这是基于原始的API，没有封装，不通用，很简单，加个配置文件就可以了。</p>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><p><img src="/2017/06/18/SpringBoot_RocketMQ/7.png" alt=""></p>
+<h3 id="pom文件"><a href="#pom文件" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- springboot整合recoketmq --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.44<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="rocketMQ的配置文件"><a href="#rocketMQ的配置文件" class="headerlink" title="rocketMQ的配置文件"></a>rocketMQ的配置文件</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">com.liss.producer.group=liss_producer</span><br><span class="line">com.liss.namesrvAddr=192.168.25.7:9876</span><br><span class="line"></span><br><span class="line">com.liss.consumer.group=liss_consumer</span><br><span class="line"></span><br><span class="line">com.liss.topic=liss_topic</span><br><span class="line"></span><br><span class="line">com.liss.tag=liss_tag</span><br></pre></td></tr></table></figure>
+<h3 id="消息实体"><a href="#消息实体" class="headerlink" title="消息实体"></a>消息实体</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Getter</span></span><br><span class="line"><span class="meta">@Setter</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@EqualsAndHashCode</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoEvent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PropertySource</span>(value = <span class="string">"classpath:recoketMQ.properties"</span>)</span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoProducer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.producer.group&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String producer_group;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.namesrvAddr&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String namesrvAddr;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.topic&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String topic;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.tag&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String tag;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//对象初始化就执行 相当于servlet的init</span></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demoProducer</span><span class="params">()</span></span>&#123;</span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(producer_group);</span><br><span class="line">        producer.setNamesrvAddr(namesrvAddr);</span><br><span class="line">        producer.setRetryTimesWhenSendFailed(<span class="number">3</span>);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            producer.start();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">50</span>; i++) &#123;</span><br><span class="line">                DemoEvent event = <span class="keyword">new</span> DemoEvent(<span class="string">"lisi"</span>+i, <span class="string">"这是一个message"</span>+i);</span><br><span class="line">                Message message = <span class="keyword">new</span> Message(topic, tag, event.getName(), event.getMessage().getBytes(<span class="string">"UTF-8"</span>));</span><br><span class="line">                SendResult sendResult = producer.send(message);</span><br><span class="line">                System.err.println(<span class="string">"生产者在生产："</span>+sendResult.getMsgId());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            log.error(e.getMessage());</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            producer.shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="消费者"><a href="#消费者" class="headerlink" title="消费者"></a>消费者</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PropertySource</span>(value = <span class="string">"classpath:recoketMQ.properties"</span>)</span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoConsumer</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.consumer.group&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String consumer_group;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.namesrvAddr&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String namesrvAddr;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.topic&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String topic;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value</span>(<span class="string">"$&#123;com.liss.tag&#125;"</span>)</span><br><span class="line">    <span class="keyword">private</span> String tag;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demoConsumer</span><span class="params">()</span></span>&#123;</span><br><span class="line">        DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(consumer_group);</span><br><span class="line">        consumer.setNamesrvAddr(namesrvAddr);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            consumer.subscribe(topic, tag);</span><br><span class="line">            consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; list, ConsumeConcurrentlyContext consumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        list.forEach(messageExt -&gt; &#123;</span><br><span class="line">                            System.err.println(<span class="string">"消费者消息："</span> + <span class="keyword">new</span> String(messageExt.getBody()));</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        log.error(e.getMessage());</span><br><span class="line">                        <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            consumer.start();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            log.error(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动类"><a href="#启动类" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RocketMQApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(RocketMQApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动查看"><a href="#启动查看" class="headerlink" title="启动查看"></a>启动查看</h3><p>这个加入了@PostConstruct，是在项目一启动，生产者消费者就开始生产和消费。<br><img src="/2017/06/18/SpringBoot_RocketMQ/8.png" alt=""></p>
+<p>上图看，有生产有消费。一个简单的基于原始API的Rocket就搭建完成了。如果实际中，会出现很多重复代码，没啥通用性。</p>
+<h2 id="自定义封装RocketMQ"><a href="#自定义封装RocketMQ" class="headerlink" title="自定义封装RocketMQ"></a>自定义封装RocketMQ</h2><p>###目录结构<br><img src="/2017/06/18/SpringBoot_RocketMQ/9.png" alt=""></p>
+<h3 id="pom文件-1"><a href="#pom文件-1" class="headerlink" title="pom文件"></a>pom文件</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- springboot整合recoketmq --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.2.6<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.44<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"># name server的地址</span><br><span class="line">com.liss.rocketMQ.namesrvAddr=192.168.25.7:9876</span><br><span class="line"></span><br><span class="line">#生产者组名称</span><br><span class="line">com.liss.rocketMQ.producerGroupName=liss_producer_group</span><br><span class="line"></span><br><span class="line">#事务生产组</span><br><span class="line">com.liss.rocketMQ.transactionProducerGroupName=transaction_producer_name</span><br><span class="line"></span><br><span class="line">#消费者组</span><br><span class="line">com.liss.rocketMQ.consumerGroupName=liss_consumer_group</span><br><span class="line"></span><br><span class="line">#生产者实例名称</span><br><span class="line">com.liss.rocketMQ.producerInstanceName=liss_producer_instance</span><br><span class="line"></span><br><span class="line">#消费者实例名称</span><br><span class="line">com.liss.rocketMQ.consumerInstanceName=liss_consumer_instance</span><br><span class="line"></span><br><span class="line">#事务生产者实例名称</span><br><span class="line">com.liss.rocketMQ.producerTranInstanceName=liss_producer_transacition</span><br><span class="line"></span><br><span class="line">#一次最大消费多少数量消息</span><br><span class="line">com.liss.rocketMQ.consumerBatchMaxSize=1</span><br><span class="line"></span><br><span class="line">#广播消费</span><br><span class="line">com.liss.rocketMQ.consumerBroadcasting=false</span><br><span class="line"></span><br><span class="line">#消费的topic：tag</span><br><span class="line">com.liss.rocketMQ.subscribe[0]=liss_topic:first</span><br><span class="line"></span><br><span class="line">#启动的时候是否消费历史记录</span><br><span class="line">com.liss.rocketMQ.enableHistoryConsumer=false</span><br><span class="line"></span><br><span class="line">#启动顺序消费</span><br><span class="line">com.liss.rocketMQ.enableOrderConsumer=false</span><br></pre></td></tr></table></figure>
+<h3 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="comment">//加载配置文件到RocketPro中</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties</span>(RocketPro.class)</span><br><span class="line"><span class="meta">@Slf</span>4j</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RocketMQConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> RocketPro rocketPro;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ApplicationEventPublisher publisher = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化打印配置信息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.err.println(rocketPro.getNamesrvAddr());</span><br><span class="line">        System.err.println(rocketPro.getProducerGroupName());</span><br><span class="line">        System.err.println(rocketPro.getConsumerBatchMaxSize());</span><br><span class="line">        System.err.println(rocketPro.getConsumerGroupName());</span><br><span class="line">        System.err.println(rocketPro.getConsumerInstanceName());</span><br><span class="line">        System.err.println(rocketPro.getProducerInstanceName());</span><br><span class="line">        System.err.println(rocketPro.getProducerTranInstanceName());</span><br><span class="line">        System.err.println(rocketPro.getTransactionProducerGroupName());</span><br><span class="line">        System.err.println(rocketPro.isConsumerBroadcasting());</span><br><span class="line">        System.err.println(rocketPro.isEnableHistoryConsumer());</span><br><span class="line">        System.err.println(rocketPro.isEnableOrderConsumer());</span><br><span class="line">        System.out.println(rocketPro.getSubscribe().get(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 生产者</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> MQClientException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"defaultMQProducer"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DefaultMQProducer <span class="title">defaultMQProducer</span><span class="params">()</span> <span class="keyword">throws</span> MQClientException </span>&#123;</span><br><span class="line">        DefaultMQProducer producer = <span class="keyword">new</span> DefaultMQProducer(rocketPro.getProducerGroupName());</span><br><span class="line">        producer.setNamesrvAddr(rocketPro.getNamesrvAddr());</span><br><span class="line">        producer.setRetryTimesWhenSendFailed(<span class="number">5</span>);</span><br><span class="line">        producer.setInstanceName(rocketPro.getProducerInstanceName());</span><br><span class="line">        producer.start();</span><br><span class="line">        log.info(<span class="string">"生产者启动"</span>);</span><br><span class="line">        <span class="keyword">return</span> producer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 事务生产者</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> MQClientException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"transactionMQProducer"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> TransactionMQProducer <span class="title">transactionMQProducer</span><span class="params">()</span> <span class="keyword">throws</span> MQClientException </span>&#123;</span><br><span class="line">        TransactionMQProducer producer = <span class="keyword">new</span> TransactionMQProducer(rocketPro.getTransactionProducerGroupName());</span><br><span class="line">        producer.setNamesrvAddr(rocketPro.getNamesrvAddr());</span><br><span class="line">        producer.setRetryTimesWhenSendFailed(<span class="number">5</span>);</span><br><span class="line">        producer.setInstanceName(rocketPro.getProducerTranInstanceName());</span><br><span class="line">        producer.setCheckThreadPoolMinSize(<span class="number">2</span>);</span><br><span class="line">        producer.setCheckThreadPoolMaxSize(<span class="number">10</span>);</span><br><span class="line">        producer.setCheckRequestHoldMax(<span class="number">100</span>);</span><br><span class="line">        <span class="comment">//3.2.6版本已经没有了，可以外部通过定时扫描解决, 当为COMMIT_MESSAGE 是消费者才能收到消息</span></span><br><span class="line">        producer.setTransactionCheckListener(<span class="keyword">new</span> TransactionCheckListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> LocalTransactionState <span class="title">checkLocalTransactionState</span><span class="params">(MessageExt messageExt)</span> </span>&#123;</span><br><span class="line">                System.out.println(messageExt.getMsgId());</span><br><span class="line">                <span class="keyword">return</span> LocalTransactionState.ROLLBACK_MESSAGE;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        producer.start();</span><br><span class="line">        log.info(<span class="string">"事务生产者启动"</span>);</span><br><span class="line">        <span class="keyword">return</span> producer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 消费者</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DefaultMQPushConsumer <span class="title">defaultMQPushConsumer</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        DefaultMQPushConsumer consumer = <span class="keyword">new</span> DefaultMQPushConsumer(rocketPro.getConsumerGroupName());</span><br><span class="line">        consumer.setNamesrvAddr(rocketPro.getNamesrvAddr());</span><br><span class="line">        consumer.setConsumerGroup(rocketPro.getConsumerGroupName());</span><br><span class="line">        consumer.setInstanceName(rocketPro.getConsumerInstanceName());</span><br><span class="line">        consumer.setPullBatchSize(rocketPro.getConsumerBatchMaxSize());</span><br><span class="line">        <span class="comment">//判断是否是广播消息</span></span><br><span class="line">        <span class="keyword">if</span>(rocketPro.isConsumerBroadcasting())&#123;</span><br><span class="line">            consumer.setMessageModel(MessageModel.BROADCASTING);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//设置批量</span></span><br><span class="line">        consumer.setConsumeMessageBatchMaxSize(rocketPro.getConsumerBatchMaxSize() == <span class="number">0</span>?<span class="number">1</span>:rocketPro.getConsumerBatchMaxSize());</span><br><span class="line">        rocketPro.getSubscribe().forEach(str-&gt;&#123;</span><br><span class="line">            String[] topic_tag = str.split(<span class="string">":"</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                consumer.subscribe(topic_tag[<span class="number">0</span>], topic_tag[<span class="number">1</span>]);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (MQClientException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                log.error(e.getMessage());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//顺序消费</span></span><br><span class="line">        <span class="keyword">if</span>(rocketPro.isEnableOrderConsumer())&#123;</span><br><span class="line">            consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerOrderly() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> ConsumeOrderlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; list, ConsumeOrderlyContext consumeOrderlyContext)</span> </span>&#123;</span><br><span class="line">                    consumeOrderlyContext.setAutoCommit(<span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        publisher.publishEvent(<span class="keyword">new</span> MessageEvent(list, consumer));</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                        <span class="keyword">return</span> ConsumeOrderlyStatus.SUSPEND_CURRENT_QUEUE_A_MOMENT;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">return</span> ConsumeOrderlyStatus.SUCCESS;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            consumer.registerMessageListener(<span class="keyword">new</span> MessageListenerConcurrently() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> ConsumeConcurrentlyStatus <span class="title">consumeMessage</span><span class="params">(List&lt;MessageExt&gt; list, ConsumeConcurrentlyContext consumeConcurrentlyContext)</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="comment">//用spring的监听，将消息放到监听中</span></span><br><span class="line">                        publisher.publishEvent(<span class="keyword">new</span> MessageEvent(list, consumer));</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                        <span class="keyword">return</span> ConsumeConcurrentlyStatus.RECONSUME_LATER;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">return</span> ConsumeConcurrentlyStatus.CONSUME_SUCCESS;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    consumer.start();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">return</span> consumer;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="自定义消息"><a href="#自定义消息" class="headerlink" title="自定义消息"></a>自定义消息</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageEvent</span> <span class="keyword">extends</span> <span class="title">ApplicationEvent</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> DefaultMQPushConsumer consumer;</span><br><span class="line">    <span class="keyword">private</span> List&lt;MessageExt&gt; msgs;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MessageEvent</span><span class="params">(List&lt;MessageExt&gt; msgs, DefaultMQPushConsumer consumer)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(msgs);</span><br><span class="line">        <span class="keyword">this</span>.consumer = consumer;</span><br><span class="line">        <span class="keyword">this</span>.setMsgs(msgs);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DefaultMQPushConsumer <span class="title">getConsumer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> consumer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setConsumer</span><span class="params">(DefaultMQPushConsumer consumer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.consumer = consumer;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;MessageExt&gt; <span class="title">getMsgs</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> msgs;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMsgs</span><span class="params">(List&lt;MessageExt&gt; msgs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.msgs = msgs;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="接受消息"><a href="#接受消息" class="headerlink" title="接受消息"></a>接受消息</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class ConsumerServiceAnnoTion &#123;</span><br><span class="line">    @EventListener(condition = &quot;#event.msgs[0].topic==&apos;liss_topic&apos; &amp;&amp; #event.msgs[0].tags==&apos;first&apos;&quot;)</span><br><span class="line">    public void listenerEvent(MessageEvent event)&#123;</span><br><span class="line">        event.getMsgs().forEach(messageExt -&gt; &#123;</span><br><span class="line">            System.err.println(&quot;消费者的消息：&quot; + new String(messageExt.getBody()));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="创建消息发送"><a href="#创建消息发送" class="headerlink" title="创建消息发送"></a>创建消息发送</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class ProducerController &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    @Qualifier(&quot;defaultMQProducer&quot;)</span><br><span class="line">    private DefaultMQProducer defaultMQProducer;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    @Qualifier(&quot;transactionMQProducer&quot;)</span><br><span class="line">    private TransactionMQProducer transactionMQProducer;</span><br><span class="line"></span><br><span class="line">    @RequestMapping(&quot;/sendMessage&quot;)</span><br><span class="line">    public void sendMessage() throws Exception &#123;</span><br><span class="line">        for (int i = 0; i &lt; 20; i++) &#123;</span><br><span class="line">            Message message = new Message(&quot;liss_topic&quot;, &quot;first&quot;, (&quot;message &quot; + i).getBytes());</span><br><span class="line">            SendResult send = defaultMQProducer.send(message);</span><br><span class="line">            System.out.println(&quot;发送状态：&quot;+send.getSendStatus());</span><br><span class="line">        &#125;</span><br><span class="line">        defaultMQProducer.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @RequestMapping(&quot;/sendTransactionMess&quot;)</span><br><span class="line">    public void sendTransactionMess() throws Exception &#123;</span><br><span class="line">        SendResult sendResult = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            // a,b,c三个值对应三个不同的状态</span><br><span class="line">            String ms = &quot;c&quot;;</span><br><span class="line">            Message msg = new Message(&quot;liss_topic&quot;,&quot;first&quot;,ms.getBytes());</span><br><span class="line">            // 发送事务消息</span><br><span class="line">            sendResult = transactionMQProducer.sendMessageInTransaction(msg, (Message msg1, Object arg) -&gt; &#123;</span><br><span class="line">                String value = &quot;&quot;;</span><br><span class="line">                if (arg instanceof String) &#123;</span><br><span class="line">                    value = (String) arg;</span><br><span class="line">                &#125;</span><br><span class="line">                if (value == &quot;&quot;) &#123;</span><br><span class="line">                    throw new RuntimeException(&quot;发送消息不能为空...&quot;);</span><br><span class="line">                &#125; else if (value ==&quot;a&quot;) &#123;</span><br><span class="line">                    return LocalTransactionState.ROLLBACK_MESSAGE;</span><br><span class="line">                &#125; else if (value ==&quot;b&quot;) &#123;</span><br><span class="line">                    return LocalTransactionState.COMMIT_MESSAGE;</span><br><span class="line">                &#125;</span><br><span class="line">                return LocalTransactionState.ROLLBACK_MESSAGE;</span><br><span class="line">            &#125;, 4);</span><br><span class="line">            System.out.println(&quot;事务生生产者状态：&quot; + sendResult.getSendStatus());</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @RequestMapping(&quot;/orderSendMessage&quot;)</span><br><span class="line">    public void orderSendMessage()&#123;</span><br><span class="line">        for(int i=0;i&lt;100;i++) &#123;</span><br><span class="line">            Message message = new Message(&quot;liss_topic&quot;, &quot;first&quot;, (&quot;order_message&quot;+i).getBytes());</span><br><span class="line">            try &#123;</span><br><span class="line">                SendResult sendResult = defaultMQProducer.send(message, new MessageQueueSelector() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public MessageQueue select(List&lt;MessageQueue&gt; list, Message message, Object o) &#123;</span><br><span class="line">                        int index = ((Integer) o) % list.size();</span><br><span class="line">                        return list.get(index);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, i);</span><br><span class="line">                System.out.println(&quot;生产的消息：&quot;+sendResult.getSendStatus());</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="启动类-1"><a href="#启动类-1" class="headerlink" title="启动类"></a>启动类</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(basePackages = &#123;<span class="string">"com.liss"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RocketApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(RocketApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><h3 id="发送普通消息"><a href="#发送普通消息" class="headerlink" title="发送普通消息"></a>发送普通消息</h3><p><img src="/2017/06/18/SpringBoot_RocketMQ/10.png" alt=""></p>
+<h3 id="发送order消息"><a href="#发送order消息" class="headerlink" title="发送order消息"></a>发送order消息</h3><p><img src="/2017/06/18/SpringBoot_RocketMQ/11.png" alt=""></p>
+<h3 id="发送事务消息"><a href="#发送事务消息" class="headerlink" title="发送事务消息"></a>发送事务消息</h3><p><img src="/2017/06/18/SpringBoot_RocketMQ/12.png" alt=""></p>
+<p>到此，生产者和消费者都可以发送和接受消息了。</p>
+
+      
+    </div>
+    
+    
+    
+     
+    <div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束  <i class="fa fa-heart"></i>  感谢您的阅读-------------</div>
+    
+</div>
+
+
+  
+</div>
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/RocketMQ/" rel="tag"><i class="fa fa-tag"></i> RocketMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/16/RocketMQ/" rel="next" title="RocketMQ 的使用">
+                <i class="fa fa-chevron-left"></i> RocketMQ 的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/24/springboot-shiro/" rel="prev" title="SpringBoot 集成shiro">
+                SpringBoot 集成shiro <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="li.sscoder">
+            
+              <p class="site-author-name" itemprop="name">li.sscoder</p>
+              <p class="site-description motion-element" itemprop="description">Love life, Love technology.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/llss6887" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="llss6887@sina.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rocket的安装"><span class="nav-text">Rocket的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载"><span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署Rocket"><span class="nav-text">部署Rocket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动"><span class="nav-text">启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动namesrv"><span class="nav-text">启动namesrv</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#启动broker"><span class="nav-text">启动broker</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与SpringBoot的集成（原始的API）"><span class="nav-text">与SpringBoot的集成（原始的API）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目录结构"><span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pom文件"><span class="nav-text">pom文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rocketMQ的配置文件"><span class="nav-text">rocketMQ的配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息实体"><span class="nav-text">消息实体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生产者"><span class="nav-text">生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消费者"><span class="nav-text">消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动类"><span class="nav-text">启动类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动查看"><span class="nav-text">启动查看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义封装RocketMQ"><span class="nav-text">自定义封装RocketMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pom文件-1"><span class="nav-text">pom文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件"><span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取配置文件"><span class="nav-text">读取配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义消息"><span class="nav-text">自定义消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接受消息"><span class="nav-text">接受消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建消息发送"><span class="nav-text">创建消息发送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动类-1"><span class="nav-text">启动类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#发送普通消息"><span class="nav-text">发送普通消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送order消息"><span class="nav-text">发送order消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发送事务消息"><span class="nav-text">发送事务消息</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">li.ss</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-heart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">文字总数&#58;</span>
+    
+    <span title="文字总数">33k</span>
+  
+</div>
+
+
+  <div class="powered-by">li.ss' nodes   <span class="post-meta-divider">|</span>    Hosted by <a target="_blank" href="https://github.com/llss6887">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
